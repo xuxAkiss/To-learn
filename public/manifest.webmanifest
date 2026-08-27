@@ -1,0 +1,19 @@
+{
+  "name": "KIXU LEARN",
+  "short_name": "KIXU",
+  "description": "个人职业路线与每日打卡",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f8fb",
+  "theme_color": "#3154d9",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
