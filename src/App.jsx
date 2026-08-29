@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
-  BarChart3, BookOpen, BriefcaseBusiness, Check, ChevronLeft, ChevronRight,
+  BarChart3, BookOpen, BriefcaseBusiness, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight,
   CircleHelp, Clock3, Download, ExternalLink, FlaskConical, Home, Map, Menu,
   Pause, Play, Plus, RotateCcw, Save, Settings2, Sparkles, Target, Trash2, Upload, X,
 } from 'lucide-react'
 import { usePersistentState } from './hooks/usePersistentState'
-import { buildDailyTasks, getPhase } from './data/dailyPlan'
+import { buildWeeklyTasks, getPhase, getPlanProgressLabel, getWeeklyPlan, planWindow } from './data/weeklyPlan'
 import { decisions, experiments, lanes, milestones } from './data/roadmap'
 import { formatChineseDate, fromDateKey, shiftDateKey, toDateKey, weekRange } from './utils/date'
 
@@ -13,8 +13,9 @@ const STORAGE_KEY = 'kixu-learn-data-v1'
 const todayKey = toDateKey()
 
 const initialStore = {
-  version: 1,
+  version: 2,
   days: {},
+  weeks: {},
   experimentData: {},
   reviews: [],
   preferences: { weeklyHours: 18 },
@@ -33,27 +34,53 @@ export default function App() {
   const [store, setStore] = usePersistentState(STORAGE_KEY, initialStore)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const selectedWeekId = weekRange(selectedDate)[0]
 
   useEffect(() => {
     setStore((current) => {
-      if (current.days[selectedDate]) return current
-      return {
+      const normalized = {
+        ...initialStore,
         ...current,
+        version: 2,
+        days: current.days || {},
+        weeks: current.weeks || {},
+        experimentData: current.experimentData || {},
+        reviews: current.reviews || [],
+        preferences: { ...initialStore.preferences, ...(current.preferences || {}) },
+      }
+      const hasDay = Boolean(normalized.days[selectedDate])
+      const hasWeek = Boolean(normalized.weeks[selectedWeekId])
+      if (hasDay && hasWeek && current.version === 2) return current
+      return {
+        ...normalized,
         days: {
-          ...current.days,
-          [selectedDate]: { tasks: buildDailyTasks(selectedDate), note: '', focusMinutes: 0 },
+          ...normalized.days,
+          [selectedDate]: hasDay ? normalized.days[selectedDate] : { note: '', focusMinutes: 0, checkedIn: false },
+        },
+        weeks: {
+          ...normalized.weeks,
+          [selectedWeekId]: hasWeek ? normalized.weeks[selectedWeekId] : { tasks: buildWeeklyTasks(selectedWeekId) },
         },
       }
     })
-  }, [selectedDate, setStore])
+  }, [selectedDate, selectedWeekId, setStore])
 
-  const day = store.days[selectedDate] || { tasks: [], note: '', focusMinutes: 0 }
+  const day = store.days?.[selectedDate] || { note: '', focusMinutes: 0, checkedIn: false }
+  const week = store.weeks?.[selectedWeekId] || { tasks: buildWeeklyTasks(selectedWeekId) }
 
   function updateDay(updater) {
     setStore((current) => {
-      const currentDay = current.days[selectedDate] || { tasks: buildDailyTasks(selectedDate), note: '', focusMinutes: 0 }
+      const currentDay = current.days?.[selectedDate] || { note: '', focusMinutes: 0, checkedIn: false }
       const nextDay = typeof updater === 'function' ? updater(currentDay) : updater
       return { ...current, days: { ...current.days, [selectedDate]: nextDay } }
+    })
+  }
+
+  function updateWeek(updater) {
+    setStore((current) => {
+      const currentWeek = current.weeks?.[selectedWeekId] || { tasks: buildWeeklyTasks(selectedWeekId) }
+      const nextWeek = typeof updater === 'function' ? updater(currentWeek) : updater
+      return { ...current, weeks: { ...(current.weeks || {}), [selectedWeekId]: nextWeek } }
     })
   }
 
@@ -82,7 +109,9 @@ export default function App() {
             dateKey={selectedDate}
             setDateKey={setSelectedDate}
             day={day}
+            week={week}
             updateDay={updateDay}
+            updateWeek={updateWeek}
             store={store}
             navigate={navigate}
           />
@@ -135,10 +164,10 @@ function HelpDialog({ close }) {
       <section className="help-dialog" role="dialog" aria-modal="true" aria-labelledby="help-title" onMouseDown={(event) => event.stopPropagation()}>
         <div className="dialog-heading"><div><small>KIXU LEARN</small><h2 id="help-title">怎么用这个系统</h2></div><button className="icon-button" onClick={close} aria-label="关闭说明"><X size={20} /></button></div>
         <ol className="help-steps">
-          <li><strong>每天只看「今日」</strong><span>完成 2–4 个可验收任务，用专注计时记录真实投入。</span></li>
-          <li><strong>每周做一次复盘</strong><span>记录产出、卡点和下周唯一重点，不用待办数量制造焦虑。</span></li>
+          <li><strong>先看本周任务</strong><span>展开任务卡，按步骤学习和实现；完成标准满足后再勾选，不按自然日硬拆进度。</span></li>
+          <li><strong>每天保留学习打卡</strong><span>用专注计时记录真实投入，写一句当天产出或卡点，结束时点击完成今日打卡。</span></li>
+          <li><strong>每月更新一次计划</strong><span>当前只维护最近一个月的详细任务，结合实际课程、比赛与完成度继续生成下一月。</span></li>
           <li><strong>用实验代替猜测</strong><span>游戏、后端、AI Infra、科研和体制内都有限时试错卡，根据作品与真实体验打分。</span></li>
-          <li><strong>到决策点再选路</strong><span>提交作品、选主攻方向、实习反馈和 offer 比较，每次都要用证据调整。</span></li>
         </ol>
         <button className="primary-button full" onClick={close}>开始今天的计划</button>
       </section>
@@ -158,32 +187,42 @@ function MobileNav({ activeView, navigate }) {
   )
 }
 
-function TodayView({ dateKey, setDateKey, day, updateDay, store, navigate }) {
+function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, store, navigate }) {
   const [adding, setAdding] = useState(false)
   const [newTask, setNewTask] = useState('')
+  const [expandedTaskId, setExpandedTaskId] = useState(null)
   const phase = getPhase(dateKey)
-  const completed = day.tasks.filter((task) => task.completed).length
-  const progress = day.tasks.length ? Math.round((completed / day.tasks.length) * 100) : 0
+  const weekId = weekRange(dateKey)[0]
+  const weekEnd = weekRange(dateKey).at(-1)
+  const weeklyPlan = getWeeklyPlan(weekId)
+  const requiredTasks = week.tasks.filter((task) => task.priority !== 'optional')
+  const completed = requiredTasks.filter((task) => task.completed).length
+  const progress = requiredTasks.length ? Math.round((completed / requiredTasks.length) * 100) : 0
   const nextDecision = decisions.find((decision) => decision.date >= dateKey) || decisions.at(-1)
 
   function toggleTask(id) {
-    updateDay((current) => ({
+    updateWeek((current) => ({
       ...current,
       tasks: current.tasks.map((task) => task.id === id ? { ...task, completed: !task.completed } : task),
     }))
   }
 
   function deleteTask(id) {
-    updateDay((current) => ({ ...current, tasks: current.tasks.filter((task) => task.id !== id) }))
+    updateWeek((current) => ({ ...current, tasks: current.tasks.filter((task) => task.id !== id) }))
   }
 
   function addTask(event) {
     event.preventDefault()
     const title = newTask.trim()
     if (!title) return
-    updateDay((current) => ({
+    updateWeek((current) => ({
       ...current,
-      tasks: [...current.tasks, { id: crypto.randomUUID(), title, category: 'custom', minutes: 30, completed: false }],
+      tasks: [...current.tasks, {
+        id: crypto.randomUUID(), title, category: 'custom', priority: 'custom', minutes: 60, completed: false,
+        outcome: '完成你为本周补充的具体事项。',
+        steps: ['写清任务的最小范围', '开始前确定可验证的交付物', '完成后在今日笔记记录结果'],
+        deliverable: '一个可以展示、运行、提交或复述的明确结果。', resources: [], generated: false,
+      }],
     }))
     setNewTask('')
     setAdding(false)
@@ -199,43 +238,67 @@ function TodayView({ dateKey, setDateKey, day, updateDay, store, navigate }) {
               <button className="date-button" onClick={() => setDateKey(todayKey)}>{formatChineseDate(dateKey)}</button>
               <button className="icon-button" onClick={() => setDateKey(shiftDateKey(dateKey, 1))} aria-label="后一天"><ChevronRight size={19} /></button>
             </div>
-            <h1>今天，向前推进一点</h1>
+            <h1>{weeklyPlan?.theme || '本周详细计划尚未更新'}</h1>
+            <p className="week-result">{weeklyPlan?.result || '不要继续使用自动生成的泛化任务。请带着上月完成情况来更新下一阶段计划。'}</p>
           </div>
-          <div className="today-progress" aria-label={`今日完成 ${completed} / ${day.tasks.length}`}>
-            <span>今日 <strong>{completed} / {day.tasks.length}</strong></span>
+          <div className="today-progress" aria-label={`本周完成 ${completed} / ${requiredTasks.length}`}>
+            <span>本周核心 <strong>{completed} / {requiredTasks.length}</strong></span>
             <div className="progress-track"><i style={{ width: `${progress}%` }} /></div>
           </div>
         </div>
 
         <div className="task-surface">
+          <div className="weekly-plan-meta">
+            <span><CalendarDays size={16} />{formatShortDate(weekId)}—{formatShortDate(weekEnd)}</span>
+            <strong>{getPlanProgressLabel(weekId)}</strong>
+          </div>
           <div className="task-list">
-            {day.tasks.map((task) => (
-              <TaskRow key={task.id} task={task} toggle={() => toggleTask(task.id)} remove={() => deleteTask(task.id)} />
+            {week.tasks.map((task) => (
+              <TaskRow
+                key={task.id}
+                task={task}
+                expanded={expandedTaskId === task.id}
+                toggleExpanded={() => setExpandedTaskId((current) => current === task.id ? null : task.id)}
+                toggle={() => toggleTask(task.id)}
+                remove={() => deleteTask(task.id)}
+              />
             ))}
-            {!day.tasks.length && <EmptyTasks />}
+            {!week.tasks.length && <EmptyTasks />}
           </div>
           {adding ? (
             <form className="add-task-form" onSubmit={addTask}>
-              <input autoFocus value={newTask} onChange={(event) => setNewTask(event.target.value)} placeholder="写下一个今天能完成的具体任务" />
+              <input autoFocus value={newTask} onChange={(event) => setNewTask(event.target.value)} placeholder="补充一个本周要交付的具体任务" />
               <button className="primary-button small" type="submit">添加</button>
               <button className="quiet-button small" type="button" onClick={() => setAdding(false)}>取消</button>
             </form>
           ) : (
-            <button className="add-task-button" onClick={() => setAdding(true)}><Plus size={18} />添加任务</button>
+            <button className="add-task-button" onClick={() => setAdding(true)}><Plus size={18} />添加本周任务</button>
           )}
 
-          <FocusTimer onComplete={(minutes) => updateDay((current) => ({ ...current, focusMinutes: current.focusMinutes + minutes }))} />
-
-          <label className="daily-note">
-            <BookOpen size={18} />
-            <textarea
-              value={day.note}
-              onChange={(event) => updateDay((current) => ({ ...current, note: event.target.value }))}
-              placeholder="写下今天的计划、想法或遇到的问题……"
-              maxLength={500}
-            />
-            <span>{day.note.length} / 500</span>
-          </label>
+          <section className={`daily-checkin ${day.checkedIn ? 'is-complete' : ''}`}>
+            <div className="daily-checkin-heading">
+              <div><small>DAILY CHECK-IN</small><h2>今日学习打卡</h2></div>
+              <span>{formatChineseDate(dateKey, true)}</span>
+            </div>
+            <FocusTimer onComplete={(minutes) => updateDay((current) => ({ ...current, focusMinutes: (current.focusMinutes || 0) + minutes }))} />
+            <label className="daily-note">
+              <BookOpen size={18} />
+              <textarea
+                value={day.note || ''}
+                onChange={(event) => updateDay((current) => ({ ...current, note: event.target.value }))}
+                placeholder="今天具体完成了什么？卡在哪里？明天从哪一步继续？"
+                maxLength={500}
+              />
+              <span>{(day.note || '').length} / 500</span>
+            </label>
+            <button className="checkin-button" onClick={() => updateDay((current) => ({ ...current, checkedIn: !current.checkedIn }))}>
+              <Check size={17} />{day.checkedIn ? '今日已打卡 · 点击撤销' : '完成今日学习打卡'}
+            </button>
+          </section>
+          <div className="plan-update-note">
+            <CalendarDays size={17} />
+            <span><strong>任务包覆盖至 {formatShortDate(planWindow.end)}</strong>建议在 {formatShortDate(planWindow.nextUpdate)} 前后，带着完成度和复盘找我更新下一月。</span>
+          </div>
         </div>
       </section>
 
@@ -245,22 +308,39 @@ function TodayView({ dateKey, setDateKey, day, updateDay, store, navigate }) {
   )
 }
 
-function TaskRow({ task, toggle, remove }) {
+function TaskRow({ task, expanded, toggleExpanded, toggle, remove }) {
   const categoryLabels = {
     engineering: '工程能力', portfolio: '作品与实习', direction: '方向实验', choice: '学业与选择', custom: '自定义',
   }
+  const priorityLabels = { core: '核心', support: '基础', optional: '选做', custom: '自定义' }
   return (
-    <div className={`task-row ${task.completed ? 'completed' : ''}`}>
-      <button className="check-button" onClick={toggle} aria-label={task.completed ? '标记为未完成' : '标记为已完成'}>
-        {task.completed && <Check size={17} strokeWidth={2.5} />}
-      </button>
-      <div className="task-copy">
-        <span>{task.title}</span>
-        <small>{task.minutes} 分钟</small>
+    <article className={`task-row ${task.completed ? 'completed' : ''} ${expanded ? 'is-expanded' : ''}`}>
+      <div className="task-row-main">
+        <button className="check-button" onClick={toggle} aria-label={`${task.completed ? '取消完成' : '完成任务'}：${task.title}`}>
+          {task.completed && <Check size={17} strokeWidth={2.5} />}
+        </button>
+        <button className="task-copy" onClick={toggleExpanded} aria-expanded={expanded}>
+          <span>{task.title}</span>
+          <small>{priorityLabels[task.priority] || '任务'} · 预计 {formatMinutes(task.minutes)}</small>
+        </button>
+        <span className={`category-label ${task.category}`}>{categoryLabels[task.category] || '任务'}</span>
+        {!task.generated && <button className="row-menu" onClick={remove} aria-label={`删除任务：${task.title}`}><Trash2 size={17} /></button>}
+        <button className="task-expand" onClick={toggleExpanded} aria-expanded={expanded} aria-label={`${expanded ? '收起' : '展开'}任务详情：${task.title}`}><ChevronDown size={18} /></button>
       </div>
-      <span className={`category-label ${task.category}`}>{categoryLabels[task.category] || '任务'}</span>
-      <button className="row-menu" onClick={remove} aria-label="删除任务"><Trash2 size={17} /></button>
-    </div>
+      {expanded && (
+        <div className="task-detail">
+          <p className="task-outcome"><strong>这项为什么做</strong>{task.outcome}</p>
+          <div className="task-steps"><strong>照着做</strong><ol>{task.steps.map((step) => <li key={step}>{step}</li>)}</ol></div>
+          <p className="task-deliverable"><Check size={16} /><span><strong>完成标准</strong>{task.deliverable}</span></p>
+          {task.resources.length > 0 && (
+            <div className="task-resources">
+              <strong>学习入口</strong>
+              <div>{task.resources.map((resource) => <a key={resource.url} href={resource.url} target="_blank" rel="noreferrer">{resource.title}<ExternalLink size={14} /></a>)}</div>
+            </div>
+          )}
+        </div>
+      )}
+    </article>
   )
 }
 
@@ -268,8 +348,8 @@ function EmptyTasks() {
   return (
     <div className="empty-tasks">
       <Check size={24} />
-      <strong>今天暂时没有任务</strong>
-      <span>添加一个小而具体的动作。</span>
+      <strong>本周没有已审核的详细任务</strong>
+      <span>请带着最近的完成记录来更新下一月计划，不再用泛化任务填充。</span>
     </div>
   )
 }
@@ -381,9 +461,9 @@ function WeeklyOverview({ store, dateKey, navigate }) {
         <div className="heat-grid">
           {heatDays.map((key) => {
             const record = store.days[key]
-            const complete = record?.tasks?.filter((task) => task.completed).length || 0
-            const intensity = complete >= 3 ? 3 : complete
-            return <span key={key} className={`heat-${intensity}`} title={`${key} · 完成 ${complete} 项`} />
+            const minutes = record?.focusMinutes || 0
+            const intensity = record?.checkedIn ? (minutes >= 120 ? 3 : minutes >= 45 ? 2 : 1) : 0
+            return <span key={key} className={`heat-${intensity}`} title={`${key} · ${record?.checkedIn ? `已打卡，专注 ${minutes} 分钟` : '未打卡'}`} />
           })}
         </div>
         <div className="heat-legend"><span>少</span><i /><i className="heat-1" /><i className="heat-2" /><i className="heat-3" /><span>多</span></div>
@@ -572,7 +652,7 @@ function ReviewView({ store, setStore }) {
   const [form, setForm] = useState(existing || { weekId, wins: '', blockers: '', learning: '', nextFocus: '', energy: 3, routeChange: '保持路线' })
   const fileInput = useRef(null)
   const weekDays = currentWeek.map((key) => store.days[key]).filter(Boolean)
-  const completedTasks = weekDays.reduce((sum, day) => sum + day.tasks.filter((task) => task.completed).length, 0)
+  const completedTasks = store.weeks?.[weekId]?.tasks?.filter((task) => task.completed).length || 0
   const focusHours = weekDays.reduce((sum, day) => sum + day.focusMinutes, 0) / 60
 
   function saveReview(event) {
@@ -598,7 +678,16 @@ function ReviewView({ store, setStore }) {
       try {
         const parsed = JSON.parse(reader.result)
         if (!parsed.days || !parsed.experimentData) throw new Error('数据格式不正确')
-        setStore(parsed)
+        setStore({
+          ...initialStore,
+          ...parsed,
+          version: 2,
+          days: parsed.days || {},
+          weeks: parsed.weeks || {},
+          experimentData: parsed.experimentData || {},
+          reviews: parsed.reviews || [],
+          preferences: { ...initialStore.preferences, ...(parsed.preferences || {}) },
+        })
       } catch (error) {
         window.alert(`导入失败：${error.message}`)
       }
@@ -624,7 +713,7 @@ function ReviewView({ store, setStore }) {
       <section className="review-summary">
         <div><span>本周完成</span><strong>{completedTasks}</strong><small>项任务</small></div>
         <div><span>专注投入</span><strong>{focusHours.toFixed(1)}</strong><small>小时</small></div>
-        <div><span>打卡天数</span><strong>{weekDays.filter((day) => day.tasks.some((task) => task.completed)).length}</strong><small>/ 7 天</small></div>
+        <div><span>打卡天数</span><strong>{weekDays.filter((day) => day.checkedIn).length}</strong><small>/ 7 天</small></div>
         <div><span>当前阶段</span><strong className="summary-text">{getPhase(todayKey).title}</strong><small>{getPhase(todayKey).target}</small></div>
       </section>
       <div className="review-layout">
@@ -658,6 +747,13 @@ function ReviewField({ label, value, onChange, placeholder }) {
 function formatShortDate(date) {
   const value = fromDateKey(date)
   return `${value.getMonth() + 1}月${value.getDate()}日`
+}
+
+function formatMinutes(minutes) {
+  if (minutes < 60) return `${minutes} 分钟`
+  const hours = Math.floor(minutes / 60)
+  const rest = minutes % 60
+  return rest ? `${hours} 小时 ${rest} 分钟` : `${hours} 小时`
 }
 
 function buildMonths(start, end) {
