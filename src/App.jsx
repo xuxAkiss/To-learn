@@ -5,7 +5,7 @@ import {
   Pause, Play, Plus, RotateCcw, Save, Settings2, Sparkles, Target, Trash2, Upload, X,
 } from 'lucide-react'
 import { usePersistentState } from './hooks/usePersistentState'
-import { buildWeeklyTasks, getPhase, getPlanProgressLabel, getWeeklyPlan, planWindow } from './data/weeklyPlan'
+import { getPhase, getPlanProgressLabel, getWeeklyPlan, planWindow, reconcileStoredWeeks, reconcileWeeklyPlan } from './data/weeklyPlan'
 import { decisions, experiments, lanes, milestones } from './data/roadmap'
 import { formatChineseDate, fromDateKey, shiftDateKey, toDateKey, weekRange } from './utils/date'
 
@@ -43,14 +43,14 @@ export default function App() {
         ...current,
         version: 2,
         days: current.days || {},
-        weeks: current.weeks || {},
+        weeks: reconcileStoredWeeks(current.weeks || {}),
         experimentData: current.experimentData || {},
         reviews: current.reviews || [],
         preferences: { ...initialStore.preferences, ...(current.preferences || {}) },
       }
       const hasDay = Boolean(normalized.days[selectedDate])
       const hasWeek = Boolean(normalized.weeks[selectedWeekId])
-      if (hasDay && hasWeek && current.version === 2) return current
+      if (hasDay && hasWeek && current.version === 2 && normalized.weeks === current.weeks) return current
       return {
         ...normalized,
         days: {
@@ -59,14 +59,14 @@ export default function App() {
         },
         weeks: {
           ...normalized.weeks,
-          [selectedWeekId]: hasWeek ? normalized.weeks[selectedWeekId] : { tasks: buildWeeklyTasks(selectedWeekId) },
+          [selectedWeekId]: reconcileWeeklyPlan(selectedWeekId, normalized.weeks[selectedWeekId]),
         },
       }
     })
   }, [selectedDate, selectedWeekId, setStore])
 
   const day = store.days?.[selectedDate] || { note: '', focusMinutes: 0, checkedIn: false }
-  const week = store.weeks?.[selectedWeekId] || { tasks: buildWeeklyTasks(selectedWeekId) }
+  const week = reconcileWeeklyPlan(selectedWeekId, store.weeks?.[selectedWeekId])
 
   function updateDay(updater) {
     setStore((current) => {
@@ -78,7 +78,7 @@ export default function App() {
 
   function updateWeek(updater) {
     setStore((current) => {
-      const currentWeek = current.weeks?.[selectedWeekId] || { tasks: buildWeeklyTasks(selectedWeekId) }
+      const currentWeek = reconcileWeeklyPlan(selectedWeekId, current.weeks?.[selectedWeekId])
       const nextWeek = typeof updater === 'function' ? updater(currentWeek) : updater
       return { ...current, weeks: { ...(current.weeks || {}), [selectedWeekId]: nextWeek } }
     })
@@ -652,7 +652,7 @@ function ReviewView({ store, setStore }) {
   const [form, setForm] = useState(existing || { weekId, wins: '', blockers: '', learning: '', nextFocus: '', energy: 3, routeChange: '保持路线' })
   const fileInput = useRef(null)
   const weekDays = currentWeek.map((key) => store.days[key]).filter(Boolean)
-  const completedTasks = store.weeks?.[weekId]?.tasks?.filter((task) => task.completed).length || 0
+  const completedTasks = reconcileWeeklyPlan(weekId, store.weeks?.[weekId]).tasks.filter((task) => task.completed).length
   const focusHours = weekDays.reduce((sum, day) => sum + day.focusMinutes, 0) / 60
 
   function saveReview(event) {
@@ -683,7 +683,7 @@ function ReviewView({ store, setStore }) {
           ...parsed,
           version: 2,
           days: parsed.days || {},
-          weeks: parsed.weeks || {},
+          weeks: reconcileStoredWeeks(parsed.weeks || {}),
           experimentData: parsed.experimentData || {},
           reviews: parsed.reviews || [],
           preferences: { ...initialStore.preferences, ...(parsed.preferences || {}) },

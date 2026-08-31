@@ -1,4 +1,4 @@
-import { daysBetween } from '../utils/date'
+import { daysBetween } from '../utils/date.js'
 
 const UNITY_PATHWAY = 'https://learn.unity.com/pathway/junior-programmer?version=6.0'
 const UNITY_CREATE_WITH_CODE = 'https://learn.unity.com/mission/programming-basics?language=en'
@@ -11,10 +11,10 @@ const LEETCODE_75 = 'https://leetcode.cn/studyplan/leetcode-75/'
 
 export const phases = [
   {
-    id: 'explore', start: '2026-08-24', end: '2026-09-06', title: '启动与验证', target: '完成第一个可运行的游戏战斗原型',
+    id: 'explore', start: '2026-08-31', end: '2026-09-13', title: '启动与验证', target: '从环境搭建开始，完成可移动角色与测试场景',
   },
   {
-    id: 'unity', start: '2026-09-07', end: '2026-10-31', title: '完成一个作品', target: '提交 Unity 中国开发挑战赛作品',
+    id: 'unity', start: '2026-09-14', end: '2026-10-31', title: '完成一个作品', target: '提交 Unity 中国开发挑战赛作品',
   },
   {
     id: 'bridge', start: '2026-11-01', end: '2026-12-15', title: '从 Unity 迁移到 UE', target: '用 UE5+C++ 重构最有价值的系统',
@@ -34,16 +34,17 @@ export const phases = [
 ]
 
 export const planWindow = {
-  start: '2026-08-24',
-  end: '2026-10-04',
-  nextUpdate: '2026-09-25',
+  revision: 'restart-2026-08-31',
+  start: '2026-08-31',
+  end: '2026-10-11',
+  nextUpdate: '2026-09-28',
   label: '第一阶段 · Unity 原型启动',
 }
 
 const weeklyPlans = {
-  '2026-08-24': {
+  '2026-08-31': {
     theme: '启动：让项目真正跑起来',
-    result: '建立独立游戏仓库，并在 Unity 中运行一个由 C# 控制的角色。',
+    result: '8 月 31 日重新起步，不补赶旧进度。本周约 7 小时：建立独立游戏仓库，并运行一个由 C# 控制的角色。',
     tasks: [
       task('setup-repo', '创建独立游戏仓库与项目说明', 'engineering', 'core', 90,
         '新建一个不与学习站混用的游戏仓库，确保项目能提交、回退和向别人说明。',
@@ -67,7 +68,7 @@ const weeklyPlans = {
         [{ title: 'GitHub · README 说明', url: GITHUB_README }]),
     ],
   },
-  '2026-08-31': {
+  '2026-09-07': {
     theme: '控制：移动、镜头与碰撞',
     result: '做出手感可控、不会穿墙、相机能稳定跟随的灰盒场景。',
     tasks: [
@@ -93,7 +94,7 @@ const weeklyPlans = {
         [{ title: 'LeetCode 75 学习计划', url: LEETCODE_75 }]),
     ],
   },
-  '2026-09-07': {
+  '2026-09-14': {
     theme: '战斗：攻击、血量与敌人',
     result: '完成最小战斗闭环：玩家能攻击，敌人会追击，双方会受伤和死亡。',
     tasks: [
@@ -119,7 +120,7 @@ const weeklyPlans = {
         [{ title: 'CANN Learning Hub · Ascend C 入门', url: CANN_INTRO }]),
     ],
   },
-  '2026-09-14': {
+  '2026-09-21': {
     theme: '闭环：胜负、UI 与重新开始',
     result: '让陌生人不看你的代码，也能进入、游玩、胜利或失败并重新开始。',
     tasks: [
@@ -145,7 +146,7 @@ const weeklyPlans = {
         [{ title: 'LeetCode 75 学习计划', url: LEETCODE_75 }]),
     ],
   },
-  '2026-09-21': {
+  '2026-09-28': {
     theme: '反馈：打击感、内容与真实试玩',
     result: '在不扩张核心机制的前提下，把原型打磨到别人愿意玩 5 分钟。',
     tasks: [
@@ -171,7 +172,7 @@ const weeklyPlans = {
         []),
     ],
   },
-  '2026-09-28': {
+  '2026-10-05': {
     theme: '发布：性能、打包与作品证据',
     result: '发布第一个可下载版本，并形成能放进简历的作品材料。',
     tasks: [
@@ -200,6 +201,7 @@ const weeklyPlans = {
 }
 
 export function getPhase(dateKey) {
+  if (dateKey < phases[0].start) return phases[0]
   return phases.find((phase) => dateKey >= phase.start && dateKey <= phase.end) || phases.at(-1)
 }
 
@@ -210,6 +212,43 @@ export function buildWeeklyTasks(weekId) {
 
 export function getWeeklyPlan(weekId) {
   return weeklyPlans[weekId] || null
+}
+
+// Refresh authored tasks without losing custom tasks, matching completions or history.
+export function reconcileWeeklyPlan(weekId, savedWeek) {
+  if (!getWeeklyPlan(weekId)) return savedWeek || { tasks: [] }
+  if (savedWeek?.planRevision === planWindow.revision) return savedWeek
+
+  const savedTasks = savedWeek?.tasks || []
+  const generated = new Map(savedTasks.filter((item) => item.generated === true).map((item) => [item.id, item]))
+  const plannedTasks = buildWeeklyTasks(weekId).map((item) => ({
+    ...item,
+    completed: Boolean(generated.get(item.id)?.completed),
+  }))
+  const plannedIds = new Set(plannedTasks.map((item) => item.id))
+  const displaced = [...generated.values()].filter((item) => !plannedIds.has(item.id))
+  const planHistory = savedWeek?.planHistory || []
+
+  return {
+    ...savedWeek,
+    planRevision: planWindow.revision,
+    tasks: [...plannedTasks, ...savedTasks.filter((item) => item.generated !== true)],
+    planHistory: displaced.length
+      ? [...planHistory, { revision: savedWeek?.planRevision || 'legacy', tasks: displaced }]
+      : planHistory,
+  }
+}
+
+export function reconcileStoredWeeks(weeks = {}) {
+  let updated = weeks
+  for (const [weekId, savedWeek] of Object.entries(weeks)) {
+    const nextWeek = reconcileWeeklyPlan(weekId, savedWeek)
+    if (nextWeek !== savedWeek) {
+      if (updated === weeks) updated = { ...weeks }
+      updated[weekId] = nextWeek
+    }
+  }
+  return updated
 }
 
 export function getPlanProgressLabel(weekId) {
