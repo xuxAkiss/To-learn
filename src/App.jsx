@@ -6,7 +6,8 @@ import {
 } from 'lucide-react'
 import { usePersistentState } from './hooks/usePersistentState'
 import { getPhase, getPlanProgressLabel, getWeeklyPlan, planWindow, reconcileStoredWeeks, reconcileWeeklyPlan } from './data/weeklyPlan'
-import { decisions, experiments, lanes, milestones } from './data/roadmap'
+import { decisions, experiments, lanes, learningStrategy, milestones } from './data/roadmap'
+import WeeklyAiExport from './components/WeeklyAiExport'
 import { formatChineseDate, fromDateKey, shiftDateKey, toDateKey, weekRange } from './utils/date'
 
 const STORAGE_KEY = 'kixu-learn-data-v1'
@@ -166,7 +167,8 @@ function HelpDialog({ close }) {
         <ol className="help-steps">
           <li><strong>先看本周任务</strong><span>展开任务卡，按步骤学习和实现；完成标准满足后再勾选，不按自然日硬拆进度。</span></li>
           <li><strong>每天保留学习打卡</strong><span>用专注计时记录真实投入，写一句当天产出或卡点，结束时点击完成今日打卡。</span></li>
-          <li><strong>每月更新一次计划</strong><span>当前只维护最近一个月的详细任务，结合实际课程、比赛与完成度继续生成下一月。</span></li>
+          <li><strong>与 AI 一起推进任务</strong><span>点击“复制本周任务给 AI”，预览后复制到对话；会附上步骤、链接和进度，个人笔记默认不包含。</span></li>
+          <li><strong>每月更新一次计划</strong><span>当前维护近期六周的详细任务，结合实际课程和完成度更新；没完成先缩范围，不强制按日历换引擎。</span></li>
           <li><strong>用实验代替猜测</strong><span>游戏、后端、AI Infra、科研和体制内都有限时试错卡，根据作品与真实体验打分。</span></li>
         </ol>
         <button className="primary-button full" onClick={close}>开始今天的计划</button>
@@ -252,6 +254,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
             <span><CalendarDays size={16} />{formatShortDate(weekId)}—{formatShortDate(weekEnd)}</span>
             <strong>{getPlanProgressLabel(weekId)}</strong>
           </div>
+          <WeeklyAiExport key={weekId} dateKey={dateKey} store={store} />
           <div className="task-list">
             {week.tasks.map((task) => (
               <TaskRow
@@ -494,6 +497,11 @@ function RoadmapView() {
         <div><h1>从现在，到毕业</h1><p>路线会根据实际作品、面试和体验结果调整。</p></div>
         <span className="framework-badge"><Target size={16} />四次证据决策</span>
       </div>
+      <section className="learning-strategy" aria-label="当前学习策略">
+        <strong>一条开发主线，保留职业选择</strong>
+        <p>{learningStrategy.summary}</p>
+        <details><summary>UE 什么时候开始？其他方向怎么保留？</summary><p>{learningStrategy.engineRule}</p><p>{learningStrategy.foundationRule}</p><p>{learningStrategy.competitionRule}</p><ul>{learningStrategy.releaseGate.map((item) => <li key={item}>{item}</li>)}</ul></details>
+      </section>
       <div className="roadmap-toolbar" role="group" aria-label="路线筛选">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>全部</button>
         {lanes.map((lane) => <button key={lane.id} className={filter === lane.id ? 'active' : ''} onClick={() => setFilter(lane.id)}>{lane.name}</button>)}

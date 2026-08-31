@@ -1,6 +1,7 @@
 import { daysBetween } from '../utils/date.js'
 
 const UNITY_PATHWAY = 'https://learn.unity.com/pathway/junior-programmer?version=6.0'
+const UNITY_ESSENTIALS = 'https://learn.unity.com/pathway/unity-essentials'
 const UNITY_CREATE_WITH_CODE = 'https://learn.unity.com/mission/programming-basics?language=en'
 const CSHARP_TOUR = 'https://learn.microsoft.com/zh-cn/dotnet/csharp/tour-of-csharp/'
 const PRO_GIT = 'https://git-scm.com/book/zh/v2.html'
@@ -14,13 +15,13 @@ export const phases = [
     id: 'explore', start: '2026-08-31', end: '2026-09-13', title: '启动与验证', target: '从环境搭建开始，完成可移动角色与测试场景',
   },
   {
-    id: 'unity', start: '2026-09-14', end: '2026-10-31', title: '完成一个作品', target: '提交 Unity 中国开发挑战赛作品',
+    id: 'unity', start: '2026-09-14', end: '2026-10-31', title: '完成一个作品', target: '发布一个 Unity 小作品；比赛选做，不以获奖为目标',
   },
   {
-    id: 'bridge', start: '2026-11-01', end: '2026-12-15', title: '从 Unity 迁移到 UE', target: '用 UE5+C++ 重构最有价值的系统',
+    id: 'bridge', start: '2026-11-01', end: '2026-12-15', title: '评估 UE 学习起点', target: '预计窗口：作品验收后再学 UE 蓝图与 C++，不按日期强制切换',
   },
   {
-    id: 'ue-demo', start: '2026-12-16', end: '2027-02-28', title: '构建目标岗位作品', target: '完成 UE5+C++ 动作战斗 Demo',
+    id: 'ue-demo', start: '2026-12-16', end: '2027-02-28', title: '构建目标岗位作品', target: '若选择 UE 求职主线，完成蓝图 + C++ 小型动作 Demo',
   },
   {
     id: 'internship', start: '2027-03-01', end: '2027-08-31', title: '获得真实开发经历', target: '拿到并完成第一段开发实习',
@@ -34,7 +35,7 @@ export const phases = [
 ]
 
 export const planWindow = {
-  revision: 'restart-2026-08-31',
+  revision: 'unity-first-ai-context-2026-08-31',
   start: '2026-08-31',
   end: '2026-10-11',
   nextUpdate: '2026-09-28',
@@ -44,22 +45,22 @@ export const planWindow = {
 const weeklyPlans = {
   '2026-08-31': {
     theme: '启动：让项目真正跑起来',
-    result: '8 月 31 日重新起步，不补赶旧进度。本周约 7 小时：建立独立游戏仓库，并运行一个由 C# 控制的角色。',
+    result: '8 月 31 日重新起步，不补赶旧进度。约 7 小时有效学习（不含下载等待）：安装引擎、认识编辑器，再让角色移动；未完成可顺延。',
     tasks: [
-      task('setup-repo', '创建独立游戏仓库与项目说明', 'engineering', 'core', 90,
-        '新建一个不与学习站混用的游戏仓库，确保项目能提交、回退和向别人说明。',
-        ['创建 Unity 3D 项目，项目名暂定 EchoPrototype', '初始化 Git，提交 Unity 官方 .gitignore', '在 README 写清游戏一句话设想、操作方式和本周目标', '完成首次 commit，并推送到 GitHub 或 GitCode'],
-        '仓库可以从远端重新克隆；README 至少包含项目目标、运行版本和操作说明。',
-        [{ title: 'Pro Git 中文版 · 第 1–2 章', url: PRO_GIT }, { title: 'GitHub · README 说明', url: GITHUB_README }]),
+      task('setup-repo', '安装 Unity 并建立独立游戏仓库', 'engineering', 'core', 90,
+        '从尚未安装引擎的起点开始，只安装一个开发环境；本周不安装 UE，也不因参赛改用团结引擎。',
+        ['从 Unity 官方下载入口安装 Hub；按所在地区官方可用版本与授权选择 Editor，优先可用的 LTS；若入口或授权不明确，记录提示向 AI 核实，不绕过限制', '在 Hub 安装 Editor 和对应 Windows 构建支持，创建基础 3D 项目 EchoPrototype；先确认空场景可以 Play，下载等待不计入学习用时', '安装 Git，建立独立于学习站的仓库；使用 GitHub 的 Unity .gitignore，检查不要提交 Library、Temp 和账号密钥', '在 README 记录 Editor 完整版本、模板、输入系统、启动方法和本周目标；完成首次 commit 并推送到自己的 GitHub/GitCode 仓库'],
+        '项目可重新打开并 Play，无红色报错；远端仓库有 Assets、Packages、ProjectSettings 和 README，没有 Library。已安装过的项目只核对，不重建。',
+        [{ title: 'Unity · 官方下载入口', url: 'https://unity.com/download' }, { title: 'Unity Learn · 零基础 Essentials', url: UNITY_ESSENTIALS }, { title: 'Git · 官方安装入口', url: 'https://git-scm.com/downloads' }, { title: 'GitHub · Unity .gitignore', url: 'https://github.com/github/gitignore/blob/main/Unity.gitignore' }, { title: 'Pro Git 中文版 · 第 1–2 章', url: PRO_GIT }]),
       task('unity-basics', '完成 Unity 编辑器与场景基础练习', 'portfolio', 'core', 120,
         '熟悉 Hierarchy、Scene、Game、Inspector、Prefab 和 Play Mode，不追求把整门课看完。',
-        ['打开 Unity Learn 的 Junior Programmer 路线', '完成入门说明与 Player Control 前置内容', '建立地面、玩家和主相机三个对象', '把玩家做成 Prefab，并成功进入 Play Mode'],
-        '场景运行无红色报错；玩家 Prefab 可删除后重新拖入场景。',
-        [{ title: 'Unity Learn · Junior Programmer', url: UNITY_PATHWAY }]),
+        ['打开 Unity Essentials，先做编辑器导航、GameObject/Transform 和场景操作练习；本周不要求刷完整条路线', '亲手练习选择、移动、旋转、缩放对象，分清 Scene 编辑视图和 Game 运行视图', '用平面、胶囊体和相机搭一间灰盒场景，保存场景；运行后退出，观察运行中修改是否保留', '把玩家做成 Prefab，删除后重新拖入场景；不用视频提示再做一遍，并解释 Prefab 和场景对象的关系'],
+        '场景运行无红色报错；不看视频能重新搭建地面与玩家，能解释 Transform、组件、Prefab、Play Mode。',
+        [{ title: 'Unity Learn · 先学 Essentials', url: UNITY_ESSENTIALS }, { title: 'Unity Learn · 后续 Junior Programmer', url: UNITY_PATHWAY }]),
       task('first-script', '写出第一个可调参数的 PlayerMover', 'engineering', 'core', 180,
         '用 C# 脚本读取输入并驱动物体移动，理解变量、方法、组件引用和每帧更新。',
-        ['学习 C# 变量、条件、方法、类的对应章节', '创建 PlayerMover.cs，并暴露 speed 字段', '读取水平与垂直输入，形成归一化移动向量', '用不同 speed 值测试，并记录一次报错及解决方法'],
-        '键盘可控制玩家移动；Inspector 能调速度；控制台无红色报错。',
+        ['只学习 C# 变量、条件、方法、类的对应章节，再看 Create with Code 的角色控制练习，不一口气补完整门 C# 课', '创建并挂载 PlayerMover.cs，暴露 speed 字段；先向 AI 提供你的 Editor 版本和项目输入系统，避免混用旧 Input API 与 Input System 示例', '读取两个方向的输入，限制斜向移动长度并按 deltaTime 移动；能说出输入、方向、速度、时间各起什么作用', '不照抄教程把速度改为原来的两倍，再独立加一个移动范围限制；用 Console 定位一次自己的报错，若无报错则做一次可回退的字段引用排错练习'],
+        '键盘能移动、Inspector 能调速度、控制台无红色报错；能解释核心代码，并独立完成参数与边界限制修改。卡住先交最小移动版，未过验收不勾选。',
         [{ title: 'Microsoft Learn · C# 入门', url: CSHARP_TOUR }, { title: 'Unity Learn · Create with Code 1', url: UNITY_CREATE_WITH_CODE }]),
       task('week-review', '留下第一份开发证据', 'portfolio', 'support', 45,
         '把“学过”变成以后简历和复盘能看懂的证据。',
@@ -191,10 +192,10 @@ const weeklyPlans = {
         ['README 补齐玩法、操作、技术结构、运行方法', '录制 60–90 秒演示视频', '写 3 个技术难点及解决过程', '上传可下载压缩包或 Release，并找一台不同电脑验证'],
         '仓库首页能看到视频/动图、技术说明和下载链接；下载版本已异机验证。',
         [{ title: 'GitHub · README 说明', url: GITHUB_README }, { title: 'Unity Learn · Job preparation', url: 'https://learn.unity.com/pathway/junior-programmer/unit/apply-object-oriented-principles/tutorial/job-preparation-junior-programmer-2?version=6.3' }]),
-      task('direction-note', '写一页方向判断：是否继续游戏客户端', 'choice', 'support', 60,
+      task('direction-note', '验收作品，并决定下一阶段主线', 'choice', 'support', 60,
         '用这六周的真实过程回答“我是否喜欢做游戏开发”，不是回答是否喜欢玩游戏。',
-        ['给兴趣、能力、作品潜力、岗位匹配各打 1–5 分', '写出最享受和最抗拒的各 3 件事', '记录试玩反馈与最终完成度', '给出继续 Unity、转 UE/C++ 或增加其他实验的暂定结论'],
-        '一页可在下次职业规划讨论中直接使用的 evidence.md。',
+        ['给兴趣、能力、作品潜力、岗位匹配各打 1–5 分，写出最享受和最抗拒的各 3 件事', '验收独立运行版本、README、演示视频与至少 3 条试玩反馈；脱离教程讲清移动/战斗/胜负流程，并独立改一个小需求、定位一个问题', '若仍想应聘 UE 岗位：验收后进入蓝图入门，再结合 C++ 重做一个机制；11 月仅为预计窗口，没完成先缩范围，不同时维护两个学习项目', '若偏向独立游戏：可继续 Unity；若开发体验不喜欢，再选一个后端/AI 应用小实验。求职主引擎与个人作品工具可以不同，保留算法、Git、系统基础和学业投入'],
+        '一页 evidence.md：验收证据、未完成项、下一阶段唯一主线及开始条件；不必学完 Unity 才接触 UE，也不把比赛获奖作为过关条件。',
         []),
     ],
   },

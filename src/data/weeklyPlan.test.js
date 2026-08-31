@@ -89,3 +89,23 @@ test('all cached or imported weeks migrate without moving historic records', () 
   assert.equal(reconcileStoredWeeks(updated), updated)
   assert.deepEqual(reconcileStoredWeeks(), {})
 })
+
+test('the previous August 31 revision refreshes content without losing completion or evidence', () => {
+  const history = [{ revision: 'legacy', tasks: [{ id: 'archived', completed: true }] }]
+  const saved = {
+    planRevision: 'restart-2026-08-31',
+    tasks: [
+      { id: 'setup-repo', title: '旧仓库任务', completed: true, generated: true },
+      { id: 'custom', title: '自己的任务', completed: true, generated: false },
+    ],
+    planHistory: history,
+  }
+  const updated = reconcileWeeklyPlan('2026-08-31', saved)
+  assert.notEqual(planWindow.revision, saved.planRevision)
+  assert.equal(updated.tasks[0].completed, true)
+  assert.match(updated.tasks[0].title, /安装 Unity/)
+  assert.match(updated.tasks[1].resources[0].url, /unity-essentials/)
+  assert.equal(updated.tasks.at(-1), saved.tasks.at(-1))
+  assert.equal(updated.planHistory, history)
+  assert.equal(reconcileWeeklyPlan('2026-08-31', updated), updated)
+})
