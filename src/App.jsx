@@ -14,18 +14,18 @@ const STORAGE_KEY = 'kixu-learn-data-v1'
 const todayKey = toDateKey()
 
 const initialStore = {
-  version: 2,
+  version: 3,
   days: {},
   weeks: {},
   experimentData: {},
   reviews: [],
-  preferences: { weeklyHours: 18 },
+  preferences: { weeklyHours: 22 },
 }
 
 const navItems = [
   { id: 'today', label: '今日', Icon: Home },
   { id: 'roadmap', label: '路线', Icon: Map },
-  { id: 'experiments', label: '方向实验', shortLabel: '实验', Icon: FlaskConical },
+  { id: 'experiments', label: '科目诊断', shortLabel: '诊断', Icon: FlaskConical },
   { id: 'review', label: '周复盘', shortLabel: '复盘', Icon: BarChart3 },
 ]
 
@@ -39,19 +39,26 @@ export default function App() {
 
   useEffect(() => {
     setStore((current) => {
+      const isLegacyStore = !current.version || current.version < 3
       const normalized = {
         ...initialStore,
         ...current,
-        version: 2,
+        version: 3,
         days: current.days || {},
         weeks: reconcileStoredWeeks(current.weeks || {}),
         experimentData: current.experimentData || {},
         reviews: current.reviews || [],
-        preferences: { ...initialStore.preferences, ...(current.preferences || {}) },
+        preferences: {
+          ...initialStore.preferences,
+          ...(current.preferences || {}),
+          weeklyHours: isLegacyStore && current.preferences?.weeklyHours === 18
+            ? 22
+            : (current.preferences?.weeklyHours ?? 22),
+        },
       }
       const hasDay = Boolean(normalized.days[selectedDate])
       const hasWeek = Boolean(normalized.weeks[selectedWeekId])
-      if (hasDay && hasWeek && current.version === 2 && normalized.weeks === current.weeks) return current
+      if (hasDay && hasWeek && current.version === 3 && normalized.weeks === current.weeks && normalized.preferences.weeklyHours === current.preferences?.weeklyHours) return current
       return {
         ...normalized,
         days: {
@@ -150,7 +157,7 @@ function Sidebar({ activeView, navigate, open, close, openHelp }) {
         <div className="sidebar-spacer" />
         <div className="profile-card">
           <span className="avatar">K</span>
-          <span><strong>Kixu</strong><small>ECNU · 2028</small></span>
+          <span><strong>Kixu</strong><small>ECNU · 2028考研</small></span>
         </div>
         <button className="sidebar-utility" onClick={() => navigate('review')}><Settings2 size={18} /><span>设置与数据</span></button>
         <button className="sidebar-utility" onClick={openHelp}><CircleHelp size={18} /><span>使用说明</span></button>
@@ -168,8 +175,8 @@ function HelpDialog({ close }) {
           <li><strong>先看本周任务</strong><span>展开任务卡，按步骤学习和实现；完成标准满足后再勾选，不按自然日硬拆进度。</span></li>
           <li><strong>每天保留学习打卡</strong><span>用专注计时记录真实投入，写一句当天产出或卡点，结束时点击完成今日打卡。</span></li>
           <li><strong>与 AI 一起推进任务</strong><span>点击“复制本周任务给 AI”，预览后复制到对话；会附上步骤、链接和进度，个人笔记默认不包含。</span></li>
-          <li><strong>每月更新一次计划</strong><span>当前维护近期六周的详细任务，结合实际课程和完成度更新；没完成先缩范围，不强制按日历换引擎。</span></li>
-          <li><strong>用实验代替猜测</strong><span>游戏、后端、AI Infra、科研和体制内都有限时试错卡，根据作品与真实体验打分。</span></li>
+          <li><strong>每月更新一次计划</strong><span>当前维护近期四周的详细任务，根据真实投入、错题重做和小测结果更新；没完成先缩量补漏。</span></li>
+          <li><strong>用诊断校准进度</strong><span>数学、408、英语、C++和时间负荷都有检查卡，完成课程不等于真正掌握。</span></li>
         </ol>
         <button className="primary-button full" onClick={close}>开始今天的计划</button>
       </section>
@@ -244,7 +251,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
             <p className="week-result">{weeklyPlan?.result || '不要继续使用自动生成的泛化任务。请带着上月完成情况来更新下一阶段计划。'}</p>
           </div>
           <div className="today-progress" aria-label={`本周完成 ${completed} / ${requiredTasks.length}`}>
-            <span>本周核心 <strong>{completed} / {requiredTasks.length}</strong></span>
+            <span>本周任务 <strong>{completed} / {requiredTasks.length}</strong></span>
             <div className="progress-track"><i style={{ width: `${progress}%` }} /></div>
           </div>
         </div>
@@ -313,7 +320,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
 
 function TaskRow({ task, expanded, toggleExpanded, toggle, remove }) {
   const categoryLabels = {
-    engineering: '工程能力', portfolio: '作品与实习', direction: '方向实验', choice: '学业与选择', custom: '自定义',
+    engineering: '数学', portfolio: '408', direction: '英语', choice: '复盘与目标', custom: '自定义',
   }
   const priorityLabels = { core: '核心', support: '基础', optional: '选做', custom: '自定义' }
   return (
@@ -445,7 +452,7 @@ function ProgressRail({ phase, nextDecision, navigate }) {
 function WeeklyOverview({ store, dateKey, navigate }) {
   const week = weekRange(dateKey)
   const hours = week.reduce((total, key) => total + (store.days[key]?.focusMinutes || 0), 0) / 60
-  const goal = store.preferences.weeklyHours || 18
+  const goal = store.preferences.weeklyHours || 22
   const heatDays = Array.from({ length: 28 }, (_, index) => shiftDateKey(dateKey, index - 27))
   return (
     <section className="weekly-overview">
@@ -472,13 +479,13 @@ function WeeklyOverview({ store, dateKey, navigate }) {
         <div className="heat-legend"><span>少</span><i /><i className="heat-1" /><i className="heat-2" /><i className="heat-3" /><span>多</span></div>
       </div>
       <div className="route-preview">
-        <div className="section-heading"><h2>职业主线</h2><button onClick={() => navigate('roadmap')}>查看完整路线 <ChevronRight size={16} /></button></div>
+        <div className="section-heading"><h2>备考主线</h2><button onClick={() => navigate('roadmap')}>查看完整路线 <ChevronRight size={16} /></button></div>
         <div className="route-line">
-          <div className="route-node active"><i /><strong>现在</strong><span>技术兴趣验证</span></div>
-          <div className="route-node decision"><i /><strong>决策点</strong><span>提交作品</span></div>
-          <div className="route-node"><i /><strong>实习准备</strong><span>投递与面试</span></div>
-          <div className="route-node"><i /><strong>实习阶段</strong><span>积累经验</span></div>
-          <div className="route-node"><i /><strong>毕业决策</strong><span>就业 / 深造 / 考公</span></div>
+          <div className="route-node active"><i /><strong>现在</strong><span>基础与节奏</span></div>
+          <div className="route-node decision"><i /><strong>2026年底</strong><span>高数与数据结构</span></div>
+          <div className="route-node"><i /><strong>2027春</strong><span>完成首轮</span></div>
+          <div className="route-node"><i /><strong>2027暑假</strong><span>强化与模考</span></div>
+          <div className="route-node"><i /><strong>初试阶段</strong><span>真题与冲刺</span></div>
         </div>
       </div>
     </section>
@@ -489,18 +496,18 @@ function RoadmapView() {
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(decisions[0])
   const visibleLanes = filter === 'all' ? lanes : lanes.filter((lane) => lane.id === filter)
-  const months = useMemo(() => buildMonths('2026-08', '2028-06'), [])
+  const months = useMemo(() => buildMonths('2026-09', '2027-12'), [])
 
   return (
     <div className="view roadmap-view">
       <div className="page-heading roadmap-heading">
-        <div><h1>从现在，到毕业</h1><p>路线会根据实际作品、面试和体验结果调整。</p></div>
-        <span className="framework-badge"><Target size={16} />四次证据决策</span>
+        <div><h1>从现在，到2027年底初试</h1><p>按小测、错题重做和限时整卷结果调整，而不是追赶视频进度。</p></div>
+        <span className="framework-badge"><Target size={16} />五次进度校准</span>
       </div>
       <section className="learning-strategy" aria-label="当前学习策略">
-        <strong>一条开发主线，保留职业选择</strong>
+        <strong>一条考研主线，按证据推进</strong>
         <p>{learningStrategy.summary}</p>
-        <details><summary>UE 什么时候开始？其他方向怎么保留？</summary><p>{learningStrategy.engineRule}</p><p>{learningStrategy.foundationRule}</p><p>{learningStrategy.competitionRule}</p><ul>{learningStrategy.releaseGate.map((item) => <li key={item}>{item}</li>)}</ul></details>
+        <details><summary>考试科目、每周负荷和阶段节点</summary><p>{learningStrategy.examRule}</p><p>{learningStrategy.timeRule}</p><p>{learningStrategy.scopeRule}</p><ul>{learningStrategy.checkpoints.map((item) => <li key={item}>{item}</li>)}</ul></details>
       </section>
       <div className="roadmap-toolbar" role="group" aria-label="路线筛选">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>全部</button>
@@ -586,7 +593,7 @@ function RoadmapInspector({ selected }) {
 }
 
 function ExperimentsView({ store, setStore }) {
-  const [selectedId, setSelectedId] = useState('game')
+  const [selectedId, setSelectedId] = useState('math')
   const selected = experiments.find((item) => item.id === selectedId)
   const data = store.experimentData[selectedId] || defaultExperimentData(selected)
 
@@ -603,8 +610,8 @@ function ExperimentsView({ store, setStore }) {
   return (
     <div className="view experiments-view">
       <div className="page-heading">
-        <div><h1>方向实验</h1><p>先做小而真实的验证，再决定要不要投入几年。</p></div>
-        <div className="evidence-count"><strong>{experiments.filter((item) => (store.experimentData[item.id]?.checks || []).some(Boolean)).length}</strong><span>个实验已有证据</span></div>
+        <div><h1>科目诊断</h1><p>用闭卷小测、延迟重做和真实错误校准掌握度。</p></div>
+        <div className="evidence-count"><strong>{experiments.filter((item) => (store.experimentData[item.id]?.checks || []).some(Boolean)).length}</strong><span>项诊断已有记录</span></div>
       </div>
       <div className="experiments-layout">
         <section className="experiment-list">
@@ -624,25 +631,25 @@ function ExperimentsView({ store, setStore }) {
         <section className="experiment-detail">
           <div className="experiment-detail-heading">
             <div><small>{selected.window}</small><h2>{selected.title}</h2></div>
-            <div className={`score-ring ${score >= 70 ? 'high' : ''}`} style={{ '--score': score }}><strong>{score}</strong><small>证据分</small></div>
+            <div className={`score-ring ${score >= 70 ? 'high' : ''}`} style={{ '--score': score }}><strong>{score}</strong><small>掌握度</small></div>
           </div>
           <blockquote>{selected.question}</blockquote>
           <div className="deliverable"><Target size={18} /><span><small>最小交付物</small><strong>{selected.deliverable}</strong></span></div>
           <div className="experiment-checks">
-            <h3>验证动作</h3>
+            <h3>诊断动作</h3>
             {selected.checks.map((check, index) => (
               <label key={check}><input type="checkbox" checked={Boolean(data.checks[index])} onChange={() => updateExperiment((current) => ({ ...current, checks: current.checks.map((value, i) => i === index ? !value : value) }))} /><span className="fake-checkbox"><Check size={14} /></span><span>{check}</span></label>
             ))}
           </div>
           <div className="rating-grid">
             {[
-              ['interest', '投入时的兴趣'], ['aptitude', '解决问题的能力'], ['portfolio', '能留下的作品'], ['market', '岗位与市场证据'],
+              ['interest', '概念掌握'], ['aptitude', '独立解题'], ['portfolio', '限时稳定'], ['market', '错题修复'],
             ].map(([key, label]) => (
               <label key={key}><span>{label}<strong>{data.ratings[key]} / 5</strong></span><input type="range" min="1" max="5" value={data.ratings[key]} onInput={(event) => updateExperiment((current) => ({ ...current, ratings: { ...current.ratings, [key]: Number(event.currentTarget.value) } }))} /></label>
             ))}
           </div>
-          <label className="experiment-notes"><span>实验笔记</span><textarea value={data.notes} onChange={(event) => updateExperiment((current) => ({ ...current, notes: event.target.value }))} placeholder="记录让你兴奋、烦躁、擅长或意外的地方……" /></label>
-          <div className="experiment-footer"><span>{completedChecks === selected.checks.length ? '已获得完整实验结果' : `还需完成 ${selected.checks.length - completedChecks} 个验证动作`}</span><span className="autosave-status"><Check size={15} />已自动保存</span></div>
+          <label className="experiment-notes"><span>诊断笔记</span><textarea value={data.notes} onChange={(event) => updateExperiment((current) => ({ ...current, notes: event.target.value }))} placeholder="记录正确率、耗时、反复错误和下一步补救动作……" /></label>
+          <div className="experiment-footer"><span>{completedChecks === selected.checks.length ? '本轮诊断动作已完成' : `还需完成 ${selected.checks.length - completedChecks} 个诊断动作`}</span><span className="autosave-status"><Check size={15} />已自动保存</span></div>
         </section>
       </div>
     </div>
@@ -657,7 +664,7 @@ function ReviewView({ store, setStore }) {
   const currentWeek = weekRange(todayKey)
   const weekId = currentWeek[0]
   const existing = store.reviews.find((review) => review.weekId === weekId)
-  const [form, setForm] = useState(existing || { weekId, wins: '', blockers: '', learning: '', nextFocus: '', energy: 3, routeChange: '保持路线' })
+  const [form, setForm] = useState(existing || { weekId, wins: '', blockers: '', learning: '', nextFocus: '', energy: 3, routeChange: '保持计划' })
   const fileInput = useRef(null)
   const weekDays = currentWeek.map((key) => store.days[key]).filter(Boolean)
   const completedTasks = reconcileWeeklyPlan(weekId, store.weeks?.[weekId]).tasks.filter((task) => task.completed).length
@@ -689,7 +696,7 @@ function ReviewView({ store, setStore }) {
         setStore({
           ...initialStore,
           ...parsed,
-          version: 2,
+          version: 3,
           days: parsed.days || {},
           weeks: reconcileStoredWeeks(parsed.weeks || {}),
           experimentData: parsed.experimentData || {},
@@ -705,13 +712,13 @@ function ReviewView({ store, setStore }) {
   }
 
   function resetData() {
-    if (window.confirm('确认清空所有打卡、实验与复盘数据吗？请先导出备份。')) setStore(initialStore)
+    if (window.confirm('确认清空所有打卡、诊断与复盘数据吗？请先导出备份。')) setStore(initialStore)
   }
 
   return (
     <div className="view review-view">
       <div className="page-heading">
-        <div><h1>周复盘</h1><p>不是评判自己，而是让路线跟随真实反馈调整。</p></div>
+        <div><h1>周复盘</h1><p>用投入、正确率和错误类型调整下一周，不用完成率安慰自己。</p></div>
         <div className="data-actions">
           <button className="quiet-button" onClick={exportData}><Download size={17} />导出数据</button>
           <button className="quiet-button" onClick={() => fileInput.current?.click()}><Upload size={17} />导入</button>
@@ -728,11 +735,11 @@ function ReviewView({ store, setStore }) {
         <form className="review-form" onSubmit={saveReview}>
           <ReviewField label="这周真正完成了什么？" value={form.wins} onChange={(value) => setForm({ ...form, wins: value })} placeholder="写成果，不写“学了很多”……" />
           <ReviewField label="最大的阻碍是什么？" value={form.blockers} onChange={(value) => setForm({ ...form, blockers: value })} placeholder="时间、范围、知识、情绪还是环境？" />
-          <ReviewField label="获得了什么新证据？" value={form.learning} onChange={(value) => setForm({ ...form, learning: value })} placeholder="关于兴趣、能力、作品或岗位的信息……" />
-          <ReviewField label="下周唯一最重要的推进是什么？" value={form.nextFocus} onChange={(value) => setForm({ ...form, nextFocus: value })} placeholder="只能选一个主结果……" />
+          <ReviewField label="本周暴露了什么知识漏洞？" value={form.learning} onChange={(value) => setForm({ ...form, learning: value })} placeholder="写重复错误、正确率变化和仍不会的知识点……" />
+          <ReviewField label="下周最需要修复什么？" value={form.nextFocus} onChange={(value) => setForm({ ...form, nextFocus: value })} placeholder="只写一个最重要的补救动作……" />
           <div className="review-controls">
             <label><span>本周能量</span><input type="range" min="1" max="5" value={form.energy} onChange={(event) => setForm({ ...form, energy: Number(event.target.value) })} /><strong>{form.energy} / 5</strong></label>
-            <label><span>路线调整</span><select value={form.routeChange} onChange={(event) => setForm({ ...form, routeChange: event.target.value })}><option>保持路线</option><option>缩小本周范围</option><option>增加工程基础时间</option><option>提前完成方向实验</option><option>需要重新评估主线</option></select></label>
+            <label><span>下周调整</span><select value={form.routeChange} onChange={(event) => setForm({ ...form, routeChange: event.target.value })}><option>保持计划</option><option>减少题量并补漏</option><option>增加数学时间</option><option>增加408时间</option><option>期末周临时降载</option></select></label>
           </div>
           <button className="primary-button" type="submit"><Save size={17} />保存本周复盘</button>
         </form>
