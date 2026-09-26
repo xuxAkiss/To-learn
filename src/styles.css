@@ -153,6 +153,8 @@ h1, h2, h3, p { margin-top: 0; }
 .completed .task-copy span { color: #4d695d; text-decoration: line-through; text-decoration-thickness: 1px; }
 .category-label { flex: 0 0 auto; padding: 4px 7px; border-radius: 5px; font-size: 11px; color: var(--primary); background: var(--primary-soft); border: 1px solid #d7e0ff; }
 .category-label.portfolio { color: #208255; background: var(--green-soft); border-color: #c9ecd9; }
+.category-label.algorithm { color: #208255; background: var(--green-soft); border-color: #c9ecd9; }
+.category-label.backend { color: #6d4cbd; background: var(--violet-soft); border-color: #e2d8ff; }
 .category-label.direction { color: #6d4cbd; background: var(--violet-soft); border-color: #e2d8ff; }
 .category-label.choice { color: #9c6a00; background: var(--amber-soft); border-color: #f4dfad; }
 .category-label.custom { color: #5f687c; background: #f1f3f7; border-color: #e0e3ea; }

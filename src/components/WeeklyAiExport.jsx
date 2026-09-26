@@ -69,7 +69,7 @@ function AiContextDialog({ dateKey, store, close }) {
       <label className="ai-preview-label" htmlFor="ai-context-preview">将复制的完整内容 <span>{text.length.toLocaleString('zh-CN')} 字符</span></label>
       <textarea id="ai-context-preview" ref={previewRef} className="ai-context-preview" value={text} readOnly spellCheck={false} />
       <p className={`ai-copy-status ${currentStatus === 'manual' ? 'is-warning' : ''}`} role="status" aria-live="polite">
-        {currentStatus === 'copied' ? '已复制！粘贴到你常用的 AI 对话中，再补充今天的卡点和可用时间。' : currentStatus === 'manual' ? '浏览器未允许自动复制。已选中内容，请按 Ctrl+C / ⌘C，或在手机上长按复制。' : '仅导出这一周；不包含其他周、科目诊断笔记或完整备份。'}
+        {currentStatus === 'copied' ? '已复制！粘贴到你常用的 AI 对话中，再补充今天的卡点和可用时间。' : currentStatus === 'manual' ? '浏览器未允许自动复制。已选中内容，请按 Ctrl+C / ⌘C，或在手机上长按复制。' : '仅导出这一周；不包含其他周、学习诊断笔记或完整备份。'}
       </p>
       <div className="ai-context-actions">
         <button className="quiet-button" onClick={selectPreview}>全选文本</button>

@@ -1,7 +1,7 @@
 {
   "name": "KIXU LEARN",
   "short_name": "KIXU",
-  "description": "复旦计算机考研周计划、科目诊断与每日打卡",
+  "description": "计算机考研与 Java 后端求职双线周计划、学习诊断与每日打卡",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

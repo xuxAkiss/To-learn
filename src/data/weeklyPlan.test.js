@@ -5,19 +5,20 @@ import {
   planWindow, reconcileStoredWeeks, reconcileWeeklyPlan,
 } from './weeklyPlan.js'
 
-test('the exam-prep task window covers the transition weekend and four full weeks', () => {
+test('the dual-track task window covers setup weekend and four full 24-hour weeks', () => {
   const dates = ['2026-09-21', '2026-09-28', '2026-10-05', '2026-10-12', '2026-10-19']
-  const firstTasks = ['exam-route-switch', 'math-limits', 'math-continuity-derivative', 'math-mvt', 'math-derivative-applications']
+  const firstTasks = ['dual-route-switch', 'math-limits', 'math-continuity', 'math-derivative', 'math-app-review']
   dates.forEach((date, index) => {
     assert.equal(getPlanProgressLabel(date), `第 ${index + 1} / 5 周`)
     assert.equal(buildWeeklyTasks(date)[0].id, firstTasks[index])
-    assert.equal(buildWeeklyTasks(date).length, 4)
+    assert.equal(buildWeeklyTasks(date).length, index === 0 ? 5 : 6)
   })
   assert.equal(planWindow.start, dates[0])
   assert.equal(planWindow.end, '2026-10-25')
   assert.equal(planWindow.nextUpdate, '2026-10-25')
   assert.equal(buildWeeklyTasks('2026-09-21').reduce((sum, item) => sum + item.minutes, 0), 240)
-  assert.equal(buildWeeklyTasks('2026-09-28').reduce((sum, item) => sum + item.minutes, 0), 1320)
+  assert.equal(buildWeeklyTasks('2026-09-28').reduce((sum, item) => sum + item.minutes, 0), 1440)
+  assert.deepEqual(buildWeeklyTasks('2026-09-28').map((item) => item.minutes), [480, 300, 120, 240, 240, 60])
 })
 
 test('dates outside the task window do not invent catch-up tasks', () => {
@@ -26,15 +27,15 @@ test('dates outside the task window do not invent catch-up tasks', () => {
   assert.deepEqual(buildWeeklyTasks('2026-10-26'), [])
   assert.equal(getPlanProgressLabel('2026-09-14'), '计划开始前')
   assert.equal(getPlanProgressLabel('2026-10-26'), '等待月度更新')
-  assert.equal(getPhase('2026-09-20').id, 'transition')
-  assert.equal(getPhase('2026-10-25').id, 'transition')
-  assert.equal(getPhase('2026-10-26').id, 'autumn-foundation')
+  assert.equal(getPhase('2026-09-20').id, 'common-foundation')
+  assert.equal(getPhase('2026-10-25').id, 'common-foundation')
+  assert.equal(getPhase('2026-12-01').id, 'database-foundation')
 })
 
 test('a fresh week begins uncompleted with the current revision', () => {
   const week = reconcileWeeklyPlan('2026-09-28')
   assert.equal(week.planRevision, planWindow.revision)
-  assert.equal(week.tasks.length, 4)
+  assert.equal(week.tasks.length, 6)
   assert.ok(week.tasks.every((item) => item.generated && !item.completed))
 })
 
@@ -46,8 +47,8 @@ test('old generated work is archived while custom work and records survive', () 
   const week = reconcileWeeklyPlan('2026-09-21', saved)
 
   assert.equal(JSON.stringify(saved), before)
-  assert.equal(week.tasks[0].id, 'exam-route-switch')
-  assert.equal(week.tasks.length, 5)
+  assert.equal(week.tasks[0].id, 'dual-route-switch')
+  assert.equal(week.tasks.length, 6)
   assert.ok(week.tasks.filter((item) => item.generated).every((item) => !item.completed))
   assert.equal(week.tasks.at(-1), custom)
   assert.equal(week.note, saved.note)
@@ -83,9 +84,9 @@ test('all cached weeks migrate without moving unrelated historic records', () =>
   const updated = reconcileStoredWeeks(weeks)
   assert.equal(JSON.stringify(weeks), before)
   assert.equal(updated['2026-09-14'], history)
-  assert.equal(updated['2026-09-21'].tasks[0].id, 'exam-route-switch')
+  assert.equal(updated['2026-09-21'].tasks[0].id, 'dual-route-switch')
   assert.equal(updated['2026-09-28'].tasks[0].id, 'math-limits')
-  assert.equal(updated['2026-10-19'].tasks[0].id, 'math-derivative-applications')
+  assert.equal(updated['2026-10-19'].tasks[0].id, 'math-app-review')
   assert.equal(reconcileStoredWeeks(updated), updated)
   assert.deepEqual(reconcileStoredWeeks(), {})
 })
@@ -102,7 +103,7 @@ test('previous site revision refreshes content without losing custom work', () =
   }
   const updated = reconcileWeeklyPlan('2026-09-21', saved)
   assert.notEqual(planWindow.revision, saved.planRevision)
-  assert.match(updated.tasks[0].title, /考研主线/)
+  assert.match(updated.tasks[0].title, /考研与就业双目标/)
   assert.match(updated.tasks[0].resources[0].url, /fudan/)
   assert.equal(updated.tasks.at(-1), saved.tasks.at(-1))
   assert.equal(updated.planHistory.length, 2)

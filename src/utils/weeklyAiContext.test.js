@@ -30,13 +30,14 @@ test('default export contains current exam instructions, links, completion and s
   const text = buildWeeklyAiContext({ dateKey: '2026-09-30', store })
   assert.match(text, /所选周：2026-09-28 — 2026-10-04/)
   assert.match(text, /当前查看日期：2026-09-30/)
-  assert.match(text, /\[ \] 高数：函数、数列极限与函数极限/)
+  assert.match(text, /\[ \] 数学 8h：极限概念与运算/)
   assert.match(text, /CUSTOM_CURRENT_WEEK/)
-  assert.match(text, /非选做任务（含基础\/自定义）：1\/5/)
+  assert.match(text, /非选做任务（含基础\/自定义）：1\/7/)
   assert.match(text, /本周打卡：1\/7 天；已记录专注：70 分钟/)
   assert.match(text, /执行步骤：/)
   assert.match(text, /验收标准：/)
-  assert.match(text, /icourse163\.org/)
+  assert.match(text, /bilibili\.com\/video\/BV1mr4y1K7Lb/)
+  assert.match(text, /dev\.java\/learn/)
   assert.doesNotMatch(text, /PRIVATE_|OTHER_WEEK|STALE_TASK|UNKNOWN_PRIVATE_FIELD/)
 })
 
@@ -55,9 +56,9 @@ test('another selected week never exports the previous week data', () => {
   assert.doesNotMatch(text, /PRIVATE_|CUSTOM_CURRENT_WEEK|函数、数列极限/)
 })
 
-test('the export carries the exam constraints needed by a learning coach', () => {
+test('the export carries both exam and Java employment constraints', () => {
   const text = buildWeeklyAiContext({ dateKey: '2026-09-28' })
-  for (const keyword of ['2027 年底初试', '数学一', '英语一', '408', '政治', '22 小时', 'C++', '闭卷小测', '延迟重做', '官方页面']) assert.ok(text.includes(keyword), keyword)
+  for (const keyword of ['2027 年底初试', '数学一', '英语一', '408', '政治', '24 小时', 'Java 后端', '项目', '闭卷小测', '延迟重做', '官方页面']) assert.ok(text.includes(keyword), keyword)
 })
 
 test('out-of-window dates stay empty instead of inventing a plan', () => {
