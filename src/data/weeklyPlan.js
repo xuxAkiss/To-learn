@@ -5,6 +5,7 @@ const WANGDAO_DS = 'https://www.bilibili.com/video/BV1b7411N798/'
 const JAVA_UPPER = 'https://www.bilibili.com/video/BV17F411T7Ao/'
 const JAVA_LOWER = 'https://www.bilibili.com/video/BV1yW4y1Y7Ms/'
 const JAVA_LEARN = 'https://dev.java/learn/'
+const PYTHON_JSON = 'https://docs.python.org/zh-cn/3/library/json.html'
 const GIT_BOOK = 'https://git-scm.com/book/zh/v2'
 const LEETCODE = 'https://leetcode.cn/'
 const LUOGU = 'https://www.luogu.com.cn/'
@@ -12,19 +13,19 @@ const FUDAN_ADMISSION = 'https://gsao.fudan.edu.cn/ssyjszszcwzszymlwfslqbf/list.
 
 export const phases = [
   {
-    id: 'common-foundation', start: '2026-09-21', end: '2026-11-30', title: '共同基础', target: '并行推进高数、数据结构、Java 和英语，完成命令行设备管理程序',
+    id: 'common-foundation', start: '2026-09-21', end: '2026-11-30', title: '共同基础', target: '推进高数、数据结构、Java 和英语；隔周完成模型 API 小练习，并开始用 AI 辅助测试与排错',
   },
   {
-    id: 'database-foundation', start: '2026-12-01', end: '2027-02-28', title: '计组与数据库', target: '完成数据结构首轮和计组主要章节，让 Java 程序能够读写 MySQL',
+    id: 'database-foundation', start: '2026-12-01', end: '2027-02-28', title: '计组与基础后端', target: '学习 SQL、HTTP、数据库和基础后端，让项目接入一个简单模型功能',
   },
   {
-    id: 'spring-and-os', start: '2027-03-01', end: '2027-04-30', title: '后端成型与操作系统', target: '完成 Spring Boot 主要业务接口，同时推进线代、概率与操作系统',
+    id: 'spring-and-os', start: '2027-03-01', end: '2027-04-30', title: '业务后端、RAG与操作系统', target: '完成基础预约业务，实现带引用的文档问答并理解 Embedding 与 RAG',
   },
   {
-    id: 'first-round-and-resume', start: '2027-05-01', end: '2027-06-30', title: '首轮收口与求职', target: '数学、408 首轮结束，项目达到简历标准，并开始实习投递',
+    id: 'first-round-and-resume', start: '2027-05-01', end: '2027-06-30', title: '首轮收口与求职', target: '数学、408 首轮结束；项目加入查询／预约工具调用与评测集，达到演示和简历标准',
   },
   {
-    id: 'intensive', start: '2027-07-01', end: '2027-08-31', title: '考研强化', target: '数学、408 进入强化与整卷训练，就业准备维持在固定低负荷',
+    id: 'intensive', start: '2027-07-01', end: '2027-08-31', title: '考研强化', target: '数学、408 进入强化与整卷训练；项目只做修错、回归评测和必要维护',
   },
   {
     id: 'papers-and-autumn', start: '2027-09-01', end: '2027-10-31', title: '真题、报考与秋招取舍', target: '核对官方目录、完成真题套卷，并将求职活动集中在固定时段',
@@ -38,11 +39,11 @@ export const phases = [
 ]
 
 export const planWindow = {
-  revision: 'exam-java-dual-track-2026-09-27',
+  revision: 'exam-ai-backend-dual-track-2026-09-28',
   start: '2026-09-21',
   end: '2026-10-25',
   nextUpdate: '2026-10-25',
-  label: '考研基础＋Java后端就业 · 首月',
+  label: '考研基础＋后端／AI应用就业 · 首月',
 }
 
 const weeklyPlans = {
@@ -51,8 +52,8 @@ const weeklyPlans = {
     result: '利用周末确认双目标、固定资料、完成基线并排好下周 24 小时时段，预计 4 小时。',
     tasks: [
       task('dual-route-switch', '写清考研与就业双目标', 'choice', 'support', 30,
-        '之后所有任务都要同时接受“是否服务初试或 Java 后端就业”的范围检查。',
-        ['写下目标：2027 年底参加初试，复旦计算机类专硕为冲刺方向', '写下就业目标：2027 年 6 月底前完成可讲清的 Java 后端项目，并尝试实习投递', '将游戏开发、CANN、额外竞赛和无关新项目标记为暂停', '记录 2028 招生目录仍需在 2027 年秋核对'],
+        '之后所有任务都要同时接受“是否服务初试或后端／AI 应用就业”的范围检查。',
+        ['写下目标：2027 年底参加初试，复旦计算机类专硕为冲刺方向', '写下就业目标：2027 年 6 月底前完成可讲清、可评测的后端／AI 应用项目，并尝试实习投递', '将大模型训练、微调、论文研究、游戏开发和无关新项目标记为暂停', '记录 2028 招生目录仍需在 2027 年秋核对'],
         '一页双目标说明，包含时间节点、保留事项、暂停事项与官方信息校准时间。',
         [{ title: '复旦大学 · 招生章程与专业目录', url: FUDAN_ADMISSION }]),
       task('baseline-check', '完成高数与数据结构基线小测', 'engineering', 'core', 60,
@@ -67,7 +68,7 @@ const weeklyPlans = {
         [{ title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Git 中文教程', url: GIT_BOOK }]),
       task('study-setup', '固定资料与每周 24 小时时段', 'choice', 'support', 60,
         '减少换路线和重复计时，把双主线落实到日历。',
-        ['固定高数、王道数据结构、英语一真题与一套词汇工具', 'Java 以黑马基础课程选章和官方文档为主，不跟完整就业路线无限延伸', '排出数学 8 小时、408 5 小时、Java 算法 2 小时、英语 4 小时、Java 项目 4 小时、复盘 1 小时', '六类时间分开记录，学校课程与睡眠不可被挤占'],
+        ['固定高数、王道数据结构、英语一真题与一套词汇工具', 'Java 以黑马基础课程选章和官方文档为主，不跟完整就业路线无限延伸', '排出数学 8 小时、408 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、复盘 1 小时', '模型 API、RAG 与评测从项目 4 小时内分配，不新增总时长'],
         '下周 24 小时已经进入日历，资料清单只保留首月会实际使用的入口。',
         [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: '黑马 Java 基础下部', url: JAVA_LOWER }]),
       task('english-baseline', '完成一篇英语一阅读基线', 'direction', 'support', 30,
@@ -79,7 +80,7 @@ const weeklyPlans = {
   },
   '2026-09-28': {
     theme: '第1周：极限、数组与 Java 起步',
-    result: '完成 24 小时：极限概念与运算、复杂度和数组、Java 语法方法与类、两篇英语阅读。',
+    result: '完成 24 小时：极限、复杂度与数组、Java 语法方法与类、首次 Python 模型 API 结构化结果练习，以及两篇英语阅读。',
     tasks: [
       task('math-limits', '数学 8h：极限概念与运算', 'engineering', 'core', 480,
         '建立高数首章的独立解题框架，避免只跟视频。',
@@ -96,11 +97,11 @@ const weeklyPlans = {
         ['完成力扣 704 二分查找', '完成力扣 27 移除元素', '每题先独立写，再查看提示或题解', '隔两天脱离原代码重写其中一题并说明复杂度'],
         '两题通过边界用例，至少一题完成延迟重写并能解释时间、空间复杂度。',
         [{ title: '力扣', url: LEETCODE }, { title: '洛谷', url: LUOGU }]),
-      task('java-foundation-1', 'Java／项目 4h：语法、方法与类', 'backend', 'core', 240,
-        '建立后续命令行项目需要的最小 Java 基础。',
-        ['快速复习变量、流程控制、数组与方法，已有内容通过小练习后跳过', '学习类、对象、构造方法和封装', '写 Device 类，并在主程序中创建、打印和修改设备', '用 Git 提交本周可运行代码'],
-        '不跟视频可独立写出 Device 类和基本操作；代码可运行且仓库有清晰提交。',
-        [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
+      task('java-foundation-1', '后端／AI项目 4h：Java 类与首次模型 API 练习', 'backend', 'core', 240,
+        '建立命令行项目所需的 Java 基础，并用熟悉的 Python 完成第一次轻量模型接口练习。',
+        ['约 3 小时：复习方法、学习类、对象、构造方法和封装，写 Device 类并完成基本操作', '约 1 小时：用熟悉的 Python 调用一个已有权限的模型 API，API Key 只放环境变量且不得提交', '要求模型返回约定的 JSON 字段；解析结果并对缺字段、类型错误或无效 JSON 给出明确失败', '用 Git 提交可运行代码；核心 Java 代码先独立写，完成后再让 AI 审查边界情况'],
+        'Java Device 类可独立重写；Python 脚本能解析结构化结果并处理至少一种异常响应，仓库不含密钥。',
+        [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Python JSON 文档', url: PYTHON_JSON }]),
       task('english-reading-1', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '建立词汇复习与真题精读的固定流程。',
         ['词汇复习 6 天，每天约 20—30 分钟', '完成两篇较早年份英语一阅读，首次作答记录耗时', '逐题定位原文并解释错误选项', '只整理真正影响理解的词汇和长句'],
@@ -108,14 +109,14 @@ const weeklyPlans = {
         []),
       task('review-week-1', '周复盘 1h：核对六类真实投入', 'choice', 'support', 60,
         '第一周先验证 24 小时结构能否落地。',
-        ['分别统计数学、408、Java 算法、英语、项目和复盘时长', '检查算法、408 与项目是否重复计时', '记录仍不能独立完成的一道题和一段代码', '确定下周最重要的两个问题'],
+        ['分别统计数学、408、Java 算法、英语、项目和复盘时长', '确认模型 API 练习计入项目 4 小时，没有额外叠加时间', '记录仍不能独立完成的一道题和一段代码', '检查密钥未入库，并写下结构化结果解析最容易失败的地方'],
         '本站保存六类投入、未完成原因和下周两个重点。',
         []),
     ],
   },
   '2026-10-05': {
     theme: '第2周：连续、链表与面向对象',
-    result: '完成 24 小时：极限方法与连续、顺序表和链表、类与接口，以及内存中的设备列表。',
+    result: '完成 24 小时：极限方法与连续、顺序表和链表、类与接口、内存设备列表，并用 AI 辅助补测试和排错。',
     tasks: [
       task('math-continuity', '数学 8h：极限方法与连续', 'engineering', 'core', 480,
         '巩固极限方法并进入函数连续与间断点。',
@@ -132,10 +133,10 @@ const weeklyPlans = {
         ['完成力扣 206 反转链表', '完成力扣 21 合并两个有序链表', '为每题画出至少一次指针变化', '隔几天重新独立写一题'],
         '两题通过并完成一次延迟重写，能解释迭代过程与复杂度。',
         [{ title: '力扣', url: LEETCODE }]),
-      task('java-foundation-2', 'Java／项目 4h：类、接口与设备列表', 'backend', 'core', 240,
-        '把面向对象内容落到命令行设备管理程序的第一版。',
-        ['复习类与对象，学习接口和基本集合使用', '使用 List 保存设备', '实现设备新增与列表查询', '将输入、业务处理和输出拆成清楚的方法并提交 Git'],
-        '程序能够新增和查询设备；能说明 Device、列表与业务方法各自职责。',
+      task('java-foundation-2', '后端／AI项目 4h：设备列表与 AI 辅助测试', 'backend', 'core', 240,
+        '把面向对象内容落到命令行程序，并建立“AI 建议—自行检查—运行验证”的编程习惯。',
+        ['学习接口和基本集合，用 List 保存设备并实现新增与列表查询', '先自己列出空列表、重复编号和非法输入等边界，再让 AI 补充测试场景', '只采纳能解释的测试或修复建议，逐项运行并记录实际结果', '将输入、业务处理和输出拆成清楚的方法并提交 Git'],
+        '新增和查询可运行；至少一组 AI 辅助测试已自行检查和执行，能解释采纳或拒绝建议的原因。',
         [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
       task('english-reading-2', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '继续稳定流程并开始归类错误。',
@@ -151,7 +152,7 @@ const weeklyPlans = {
   },
   '2026-10-12': {
     theme: '第3周：导数、栈队列与集合',
-    result: '完成 24 小时：导数与微分、链表练习和栈队列、Java 异常泛型集合与设备增删改查。',
+    result: '完成 24 小时：导数与微分、链表和栈队列、Java 异常集合与 CRUD，以及第二次模型 API 结构化结果练习。',
     tasks: [
       task('math-derivative', '数学 8h：导数与微分', 'engineering', 'core', 480,
         '把极限过渡到导数定义和基础计算。',
@@ -168,11 +169,11 @@ const weeklyPlans = {
         ['完成力扣 20 有效的括号', '完成力扣 232 用栈实现队列', '补齐空结构、连续操作等边界用例', '隔日重新完成其中一题'],
         '两题通过，至少一题可脱离题解重写并解释辅助结构的作用。',
         [{ title: '力扣', url: LEETCODE }]),
-      task('java-foundation-3', 'Java／项目 4h：异常、泛型、集合与 CRUD', 'backend', 'core', 240,
-        '用异常和集合完成命令行设备管理的主要内存版功能。',
-        ['学习异常、泛型与 List、Map、Set 的必要用法', '实现设备新增、查询、修改和删除', '处理不存在、重复编号和非法输入', '用 Git 分成至少两个清晰提交'],
-        '内存版 CRUD 可运行；非法输入有明确提示，能解释为什么选择当前集合。',
-        [{ title: '黑马 Java 基础下部', url: JAVA_LOWER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
+      task('java-foundation-3', '后端／AI项目 4h：CRUD 与第二次模型 API 练习', 'backend', 'core', 240,
+        '完成内存版 CRUD，并把模型调用练习扩展到更严格的结构校验和失败处理。',
+        ['约 3 小时：学习异常、泛型与集合，完成设备新增、查询、修改、删除及非法输入处理', '约 1 小时：用 Python 再调用一次模型 API，要求返回包含列表或嵌套字段的结构化结果', '模拟缺字段、错误类型、超时或拒答中的至少一种情况，确保程序不会静默接受错误数据', '可让 AI 协助生成测试与定位错误，但每个改动都要自行运行、检查并解释后再提交'],
+        '内存版 CRUD 可运行；第二次 API 练习包含结构校验和失败用例，仓库无密钥且改动可解释。',
+        [{ title: '黑马 Java 基础下部', url: JAVA_LOWER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Python JSON 文档', url: PYTHON_JSON }]),
       task('english-reading-3', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '通过连续三周数据找出主要错误模式。',
         ['词汇复习 6 天', '精读两篇英语一阅读并记录首次耗时', '更新词汇、长句、定位和选项比较的错误次数', '只针对出现最多的一类错误安排下周动作'],
@@ -204,10 +205,10 @@ const weeklyPlans = {
         ['从前 3 周题目中随机选 3 题', '限时独立完成，不看旧代码', '未完成的题只记录卡点，次日再尝试', '整理一个可复用但能解释的输入输出模板'],
         '至少 3 题完成限时复做，能说明仍不稳定的题型。',
         [{ title: '力扣', url: LEETCODE }, { title: '洛谷', url: LUOGU }]),
-      task('java-cli-v1', 'Java／项目 4h：完成命令行版本并用 Git 保存', 'backend', 'core', 240,
-        '形成首月可展示的小成果，为后续文件与 MySQL 持久化做准备。',
-        ['整合设备新增、查询、修改与删除', '加入菜单循环和基本输入校验', '补充文件读写；时间不足时先完成写入和读取一种格式', '整理 README：运行方式、功能、已知限制，并打一个 Git 标签'],
-        '命令行设备管理程序可重新运行；主要功能可脱离视频重写，README 与 Git 历史清楚。',
+      task('java-cli-v1', '后端／AI项目 4h：命令行版本、测试与 Git', 'backend', 'core', 240,
+        '形成首月可展示的小成果，并留下 AI 辅助过程可审查、可解释的证据。',
+        ['整合设备新增、查询、修改与删除，加入菜单循环和基本输入校验', '补充文件读写；时间不足时先完成一种格式的写入和读取', '让 AI 审查测试遗漏或一个真实报错；自行复现、验证建议并记录最终采用的修改', '整理 README：运行方式、功能、模型 API 小练习、测试证据、已知限制，并打 Git 标签'],
+        '命令行程序可重新运行；主要功能可独立解释，AI 建议经过测试验证，README 与 Git 历史清楚。',
         [{ title: 'Git 中文教程', url: GIT_BOOK }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
       task('english-reading-4', '英语 4h：阅读复盘与长句整理', 'direction', 'support', 240,
         '完成首月阅读闭环并确定下一月薄弱项。',
@@ -216,7 +217,7 @@ const weeklyPlans = {
         []),
       task('monthly-checkpoint', '周复盘 1h：双主线月度验收', 'choice', 'support', 60,
         '用解题、代码和真实投入决定下一月计划。',
-        ['记录数学小测、数据结构复做、算法复做和命令行项目结果', '统计六类四周平均投入，不重复计时', '如果数学或 408 首轮落后两周以上，暂停增加新技术', '把完成证据、卡点和下一月两个重点带到计划更新会话'],
+        ['记录数学小测、数据结构复做、算法复做和命令行项目结果', '检查两次模型 API 练习、AI 辅助测试和密钥安全记录', '统计六类四周平均投入，不重复计时；如果数学或 408 落后两周以上，暂停增加 AI 功能', '把完成证据、卡点和下一月两个重点带到计划更新会话'],
         '得到首月验收表，并明确下一月正常推进、缩量或补漏。',
         []),
     ],

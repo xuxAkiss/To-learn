@@ -38,6 +38,7 @@ test('default export contains current exam instructions, links, completion and s
   assert.match(text, /验收标准：/)
   assert.match(text, /bilibili\.com\/video\/BV1mr4y1K7Lb/)
   assert.match(text, /dev\.java\/learn/)
+  assert.match(text, /docs\.python\.org/)
   assert.doesNotMatch(text, /PRIVATE_|OTHER_WEEK|STALE_TASK|UNKNOWN_PRIVATE_FIELD/)
 })
 
@@ -58,7 +59,7 @@ test('another selected week never exports the previous week data', () => {
 
 test('the export carries both exam and Java employment constraints', () => {
   const text = buildWeeklyAiContext({ dateKey: '2026-09-28' })
-  for (const keyword of ['2027 年底初试', '数学一', '英语一', '408', '政治', '24 小时', 'Java 后端', '项目', '闭卷小测', '延迟重做', '官方页面']) assert.ok(text.includes(keyword), keyword)
+  for (const keyword of ['2027 年底初试', '数学一', '英语一', '408', '政治', '24 小时', 'AI 应用后端', '模型 API', 'RAG', '工具调用', '评测', '不额外增加总时长', '官方页面']) assert.ok(text.includes(keyword), keyword)
 })
 
 test('out-of-window dates stay empty instead of inventing a plan', () => {

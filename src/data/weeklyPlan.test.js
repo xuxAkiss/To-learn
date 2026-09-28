@@ -21,6 +21,21 @@ test('the dual-track task window covers setup weekend and four full 24-hour week
   assert.deepEqual(buildWeeklyTasks('2026-09-28').map((item) => item.minutes), [480, 300, 120, 240, 240, 60])
 })
 
+test('AI application work is folded into existing project hours on alternating weeks', () => {
+  const firstWeek = buildWeeklyTasks('2026-09-28')
+  const secondWeek = buildWeeklyTasks('2026-10-05')
+  const thirdWeek = buildWeeklyTasks('2026-10-12')
+  for (const tasks of [firstWeek, secondWeek, thirdWeek]) {
+    assert.equal(tasks.reduce((sum, item) => sum + item.minutes, 0), 1440)
+    assert.equal(tasks.filter((item) => item.category === 'backend').length, 1)
+    assert.equal(tasks.find((item) => item.category === 'backend').minutes, 240)
+  }
+  assert.match(firstWeek.find((item) => item.category === 'backend').title, /首次模型 API/)
+  assert.match(secondWeek.find((item) => item.category === 'backend').title, /AI 辅助测试/)
+  assert.match(thirdWeek.find((item) => item.category === 'backend').title, /第二次模型 API/)
+  assert.match(firstWeek.find((item) => item.category === 'backend').deliverable, /仓库不含密钥/)
+})
+
 test('dates outside the task window do not invent catch-up tasks', () => {
   assert.equal(getWeeklyPlan('2026-09-14'), null)
   assert.deepEqual(buildWeeklyTasks('2026-09-14'), [])

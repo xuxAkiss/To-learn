@@ -7,17 +7,16 @@ const MYSQL_TUTORIAL = 'https://dev.mysql.com/doc/refman/8.4/en/tutorial.html'
 const LEETCODE = 'https://leetcode.cn/problemset/'
 
 export const learningStrategy = {
-  summary: '双目标：参加 2027 年底初试，冲刺复旦计算机类专硕；同时形成 Java 后端实习、就业的基本竞争力。2027 年 6 月底前完成数学与 408 首轮，并做出一个能独立讲清的后端项目。',
+  summary: '双目标：参加 2027 年底初试，冲刺复旦计算机类专硕；同时形成后端开发／AI 应用后端的实习与就业竞争力。2027 年 6 月底前完成数学与 408 首轮，并做出一个能独立讲清、可评测的 AI 应用后端项目。',
   examRule: '目前按数学一、英语一、408、政治准备；你参加的是 2028 年招生，最终专业、科目、统考名额和学费必须以 2027 年秋发布的官方目录为准。',
-  timeRule: '学期内先执行每周 24 小时：数学 8 小时、408 笔试 5 小时、Java 算法 2 小时、英语 4 小时、Java／后端项目 4 小时、周复盘 1 小时。三类编程与笔试时间分别记录，不重复计时。',
-  scopeRule: '近期只推进高数、数据结构、Java 和英语。先做小程序与命令行设备管理，再进入 MySQL、JDBC 和 Spring Boot；不同时扩张多套框架、桌面 GUI、复杂小游戏或无关项目。',
+  timeRule: '学期内仍执行每周 24 小时：数学 8 小时、408 笔试 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、周复盘 1 小时。模型 API、RAG、工具调用和评测都从原项目时间内分配，不额外增加总时长。',
+  scopeRule: '近期推进高数、数据结构、Java 和英语；每两周从项目时间中拿出一次小练习，用熟悉的 Python 调用模型 API 并解析结构化结果。只学应用所需的模型接口、Embedding、RAG、工具调用与评测，不同时铺开大模型训练、微调和论文研究。',
   checkpoints: [
-    '2026 年 11 月底：高数与数据结构推进，Java 集合与文件读写完成，命令行设备管理程序可独立重写',
-    '2027 年 2 月底：数据结构首轮结束，计组主要章节完成，Java 程序能够读写 MySQL',
-    '2027 年 4 月底：Spring Boot 项目主要接口可运行、可测试、可讲清请求到数据库的过程',
-    '2027 年 6 月底：数学与 408 首轮结束，项目可写进简历，并开始实习投递与面试复盘',
-    '2027 年 7—8 月：考研强化为主，就业仅保留算法、项目复盘与定向投递',
-    '2027 年 9 月起：主要精力转向初试；秋招与项目维护放进固定时间窗口',
+    '2026 年 11 月底：Java 与算法继续推进，每两周完成一次 Python 模型 API／结构化结果小练习，并开始用 AI 辅助测试和排错',
+    '2027 年 2 月底：完成 SQL、HTTP、数据库与基础后端，让项目接入一个简单模型功能',
+    '2027 年 4 月底：基础预约业务完成，实现带引用的文档问答，并理解 Embedding 与 RAG 数据流',
+    '2027 年 6 月底：加入查询与预约工具调用，建立小型评测集，项目可演示、可解释并可写进简历',
+    '2027 年 7 月以后：考研强化为主，项目只通过修错和评测维护，不继续增加框架',
   ],
 }
 
@@ -47,14 +46,14 @@ export const lanes = [
   },
   {
     id: 'backend',
-    name: 'Java后端 / 项目',
+    name: '后端 / AI应用',
     color: 'violet',
     items: [
-      { id: 'java-foundation', title: 'Java 基础与命令行程序', start: '2026-09', end: '2026-11', note: '语法、类与接口、异常、泛型、集合、文件读写；完成命令行设备管理程序，不做桌面 GUI。', resources: [{ title: 'Java 官方学习文档', url: JAVA_LEARN }] },
-      { id: 'mysql-jdbc', title: 'MySQL、JDBC 与 Git', start: '2026-12', end: '2027-02', note: '学习 SQL、表设计、事务、索引与参数化查询；用用户、设备、固定可预约时段、预约记录四张核心表，将命令行程序迁移到 MySQL。', resources: [{ title: 'MySQL 官方入门', url: MYSQL_TUTORIAL }] },
-      { id: 'spring-backend', title: 'Spring Boot 可运行后端', start: '2027-03', end: '2027-04', note: '按 HTTP、Maven、接口、校验、业务、数据库、异常与测试推进；实现设备与时段查询、创建和取消预约、个人预约查询、管理员维护设备。', resources: [{ title: 'Spring REST', url: SPRING_REST }, { title: 'Spring 连接 MySQL', url: SPRING_MYSQL }, { title: 'Spring Web 测试', url: SPRING_TESTING }] },
-      { id: 'resume-project', title: '并发、幂等、性能与简历', start: '2027-05', end: '2027-06', note: '解决同时预约、重复请求和慢查询；补 Linux 运行与日志操作，留下测试、性能说明、README、一页简历与 5 分钟项目讲解。算法累计目标约 60—80 道认真做过且能复做的题。' },
-      { id: 'project-maintenance', title: '项目维护与面试复盘', start: '2027-07', end: '2027-12', note: '停止堆功能，只保留每周少量算法、项目复述、面试问题整理与必要修复。' },
+      { id: 'java-foundation', title: 'Java 基础与模型 API 小练习', start: '2026-09', end: '2026-11', note: 'Java 语法、集合、文件读写和命令行程序继续；每两周从项目时间中安排一次 Python 模型 API 小练习，解析 JSON 等结构化结果。核心算法先独立写，再让 AI 审查；AI 生成的测试与修复必须自己运行、检查并解释。', resources: [{ title: 'Java 官方学习文档', url: JAVA_LEARN }] },
+      { id: 'mysql-jdbc', title: 'SQL、HTTP、基础后端与模型功能', start: '2026-12', end: '2027-02', note: '学习 SQL、HTTP、表设计、事务、索引与数据库访问；完成基础后端，并接入一个范围明确的简单模型功能。模型失败、超时和无效结构必须有处理。', resources: [{ title: 'MySQL 官方入门', url: MYSQL_TUTORIAL }] },
+      { id: 'spring-backend', title: '预约业务与带引用文档问答', start: '2027-03', end: '2027-04', note: '完成设备与时段查询、创建和取消预约、个人预约查询及管理员维护；学习 Embedding 与 RAG，实现回答中可追溯到原文片段的文档问答。', resources: [{ title: 'Spring REST', url: SPRING_REST }, { title: 'Spring 连接 MySQL', url: SPRING_MYSQL }, { title: 'Spring Web 测试', url: SPRING_TESTING }] },
+      { id: 'resume-project', title: '工具调用、评测与简历', start: '2027-05', end: '2027-06', note: '让模型通过受控工具查询设备与执行预约；覆盖参数校验、权限、失败回退和幂等。建立包含正常、边界、无答案与恶意输入的小型评测集，留下结果、README、演示和简历表述。' },
+      { id: 'project-maintenance', title: '修错与评测维护', start: '2027-07', end: '2027-12', note: '考研强化为主。项目停止增加框架，只根据真实错误修复代码、回归评测、更新文档与准备项目讲解。' },
     ],
   },
   {
@@ -73,7 +72,7 @@ export const lanes = [
     name: '求职 / 报考',
     color: 'green',
     items: [
-      { id: 'internship-watch', title: '实习岗位与定向投递', start: '2027-04', end: '2027-06', note: '4—6 月开始关注 Java 后端实习并尝试投递，不等项目完美；按面试反馈定向补课。' },
+      { id: 'internship-watch', title: '后端／AI应用岗位与投递', start: '2027-04', end: '2027-06', note: '4—6 月开始关注 Java 后端与 AI 应用后端实习，不等项目完美；按岗位描述和面试反馈定向补课。' },
       { id: 'summer-tradeoff', title: '实习与强化取舍', start: '2027-07', end: '2027-08', note: '无实习可执行每周 35—40 小时强化；全职实习必须单独重排，不能与强化量直接叠加。' },
       { id: 'catalog-and-autumn', title: '目录核对与秋招备选', start: '2027-09', end: '2027-10', note: '核对 2028 招生目录，同时整理岗位清单；投递、笔试和面试集中在固定时间内。', resources: [{ title: '复旦大学 · 招生章程与专业目录', url: FUDAN_ADMISSION }] },
       { id: 'post-exam', title: '复试、实习与春招', start: '2027-12', end: '2027-12', note: '初试后增加 Java 机考，整理项目与本科课程，并根据考试表现继续实习或春招申请。' },
@@ -84,33 +83,33 @@ export const lanes = [
 export const decisions = [
   {
     id: 'rhythm', date: '2026-10-25', title: '四周双线节奏是否可持续',
-    why: '验证每周 24 小时是否能同时维持考研基础与 Java 后端起步，而不挤压学校课程和睡眠。',
-    standards: ['数学与数据结构有实际做题记录', 'Java 能独立写出当周小程序', '英语完成每周 2 篇精读', '六类时间分别记录且没有重复计时'],
+    why: '验证每周 24 小时是否能同时维持考研基础与后端／AI 应用起步，而不挤压学校课程和睡眠。',
+    standards: ['数学与数据结构有实际做题记录', 'Java 能独立写出当周小程序', '至少完成一次 Python 模型 API 结构化结果练习', '英语完成每周 2 篇精读', '六类时间分别记录且没有重复计时'],
     adjust: ['连续两周超负荷：先减项目功能与额外视频', '数学或 408 落后两周以上：暂停增加新技术', '节奏稳定：继续推进命令行设备管理程序'],
   },
   {
     id: 'foundation', date: '2026-11-30', title: '共同基础验收',
     why: '阶段一必须同时留下解题证据和可运行程序，避免只学考试或只看 Java 课程。',
-    standards: ['能独立写二分、链表反转并解释复杂度', '能比较数组、链表、哈希表场景', '命令行设备管理程序可脱离视频重写', '高数常规题有错因记录'],
+    standards: ['能独立写二分、链表反转并解释复杂度', '命令行设备管理程序可脱离视频重写', '模型 API 响应能校验并解析为结构化结果', 'AI 辅助生成的测试或修复已自行运行、检查和解释', '高数常规题有错因记录'],
     adjust: ['Java 基础薄弱：寒假前补集合与文件读写', '数学或数据结构薄弱：减少项目范围继续打基础', '达标：进入数据库、JDBC 与计组'],
   },
   {
     id: 'backend-entry', date: '2027-02-28', title: '数据库与计组验收',
     why: '进入 Spring Boot 前，必须会 SQL、Java 数据库读写，并完成数据结构首轮与计组主要章节。',
-    standards: ['能独立写多表查询与分组统计', 'Java 程序能使用参数化查询读写 MySQL', '能用 Git 提交、查看差异并回退自己的改动', '数据结构首轮结束且计组主要章节完成'],
-    adjust: ['SQL 不熟：延后框架，先补查询与表设计', '计组落后：压缩项目附加功能', '达标：3 月进入 Spring Boot 与操作系统'],
+    standards: ['能独立写多表查询与分组统计', 'Java 程序能使用参数化查询读写 MySQL', '能说明一次 HTTP 请求和一次模型调用的失败处理', '项目已有一个简单、可测试的模型功能', '数据结构首轮结束且计组主要章节完成'],
+    adjust: ['SQL 不熟：延后 AI 功能，先补查询与表设计', '计组落后：压缩模型功能范围', '达标：3 月进入基础业务、RAG 与操作系统'],
   },
   {
     id: 'resume-ready', date: '2027-06-30', title: '首轮与简历项目验收',
     why: '6 月底是考研首轮、项目完成度和暑期实习选择共同收口的节点。',
-    standards: ['数学与 408 首轮完成并有做题记录', '项目可按 README 启动并有核心接口测试', '能讲清并发预约、幂等或性能优化中的至少两个问题', '完成一页简历和一次 5 分钟项目讲解', '4—6 月已有岗位关注或投递记录'],
+    standards: ['数学与 408 首轮完成并有做题记录', '项目可按 README 启动并有核心接口测试', '文档回答能展示引用，查询与预约工具调用受参数和权限约束', '评测集覆盖正常、边界、无答案与失败场景', '完成一页简历和一次 5 分钟项目讲解', '4—6 月已有岗位关注或投递记录'],
     adjust: ['考研首轮落后：暑假优先补齐首轮', '项目仍不稳定：停止加功能，只修可演示主链路', '获得全职实习：按真实工时重排强化计划'],
   },
   {
     id: 'intensive-end', date: '2027-08-31', title: '强化与就业负荷评估',
     why: '暑假结束后主要精力将转向真题和冲刺，需要确认强化质量与就业维护成本。',
     standards: ['数学与 408 完成完整限时试卷', '能统计知识、方法、计算和时间类失分', '就业准备控制在固定时段', '政治已启动且英语全题型开始覆盖'],
-    adjust: ['强化明显不足：9 月暂停非必要投递', '实习占用过高：降低套卷数量并重排', '状态稳定：进入真题、目录核对与报名'],
+    adjust: ['强化明显不足：9 月暂停非必要投递', '实习占用过高：降低套卷数量并重排', '项目只修错和跑评测，不新增框架', '状态稳定：进入真题、目录核对与报名'],
   },
   {
     id: 'catalog', date: '2027-09-30', title: '报考与秋招取舍',
@@ -140,10 +139,10 @@ export const experiments = [
     checks: ['先独立实现再查看提示', '代码覆盖边界用例', '读过题解的题隔日重新完成'],
   },
   {
-    id: 'backend', title: '后端项目证据', window: '每两周', status: 'planned',
-    question: '项目是否留下了可以运行、测试、讲解和写进简历的证据？',
-    deliverable: '可运行版本、测试、README 与问题解决记录',
-    checks: ['按 README 可重新启动', '核心功能有正常与失败测试', '能说明一个真实解决的问题而不虚构规模'],
+    id: 'backend', title: '后端／AI应用项目证据', window: '每两周', status: 'planned',
+    question: '模型能力是否被后端约束、测试和评测，而不是只做一次成功演示？',
+    deliverable: '可运行版本、引用或工具调用记录、测试、评测结果与 README',
+    checks: ['按 README 可重新启动', '模型输出有结构校验、失败处理或引用', 'AI 生成代码已自行检查、运行并能解释', '能说明一个真实问题而不虚构效果或规模'],
   },
   {
     id: 'english', title: '英语阅读诊断', window: '每两周', status: 'active',
@@ -162,10 +161,10 @@ export const experiments = [
 export const milestones = [
   { date: '2026-09-26', title: '启动考研与就业双主线', state: 'done' },
   { date: '2026-10-25', title: '完成首个四周节奏验证', state: 'current' },
-  { date: '2026-11-30', title: '完成命令行设备管理程序', state: 'planned' },
-  { date: '2027-02-28', title: '进入数据库与后端开发', state: 'planned' },
-  { date: '2027-04-30', title: '完成可运行 Spring Boot 后端', state: 'planned' },
-  { date: '2027-06-30', title: '首轮结束、项目进入简历', state: 'planned' },
+  { date: '2026-11-30', title: 'Java基础＋模型API小练习', state: 'planned' },
+  { date: '2027-02-28', title: '基础后端接入模型功能', state: 'planned' },
+  { date: '2027-04-30', title: '完成业务后端与引用问答', state: 'planned' },
+  { date: '2027-06-30', title: '工具调用、评测与简历完成', state: 'planned' },
   { date: '2027-08-31', title: '完成强化并评估就业负荷', state: 'planned' },
   { date: '2027-09-30', title: '确认报考与秋招取舍', state: 'planned' },
   { date: '2027-12-31', title: '完成初试并转复试／春招', state: 'planned' },

@@ -157,7 +157,7 @@ function Sidebar({ activeView, navigate, open, close, openHelp }) {
         <div className="sidebar-spacer" />
         <div className="profile-card">
           <span className="avatar">K</span>
-          <span><strong>Kixu</strong><small>2028考研 · Java后端</small></span>
+          <span><strong>Kixu</strong><small>2028考研 · 后端／AI应用</small></span>
         </div>
         <button className="sidebar-utility" onClick={() => navigate('review')}><Settings2 size={18} /><span>设置与数据</span></button>
         <button className="sidebar-utility" onClick={openHelp}><CircleHelp size={18} /><span>使用说明</span></button>
@@ -176,7 +176,7 @@ function HelpDialog({ close }) {
           <li><strong>每天保留学习打卡</strong><span>用专注计时记录真实投入，写一句当天产出或卡点，结束时点击完成今日打卡。</span></li>
           <li><strong>与 AI 一起推进任务</strong><span>点击“复制本周任务给 AI”，预览后复制到对话；会附上步骤、链接和进度，个人笔记默认不包含。</span></li>
           <li><strong>每月更新一次计划</strong><span>当前维护近期四周的详细任务，根据真实投入、错题重做和小测结果更新；没完成先缩量补漏。</span></li>
-          <li><strong>用诊断校准进度</strong><span>数学、408、Java算法、后端项目、英语和双线负荷都有检查卡，完成课程不等于真正掌握。</span></li>
+          <li><strong>用诊断校准进度</strong><span>数学、408、Java算法、后端／AI应用项目、英语和双线负荷都有检查卡，完成课程或一次演示不等于真正掌握。</span></li>
         </ol>
         <button className="primary-button full" onClick={close}>开始今天的计划</button>
       </section>
@@ -320,7 +320,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
 
 function TaskRow({ task, expanded, toggleExpanded, toggle, remove }) {
   const categoryLabels = {
-    engineering: '数学', portfolio: '408', algorithm: 'Java算法', backend: 'Java后端', direction: '英语', choice: '复盘与目标', custom: '自定义',
+    engineering: '数学', portfolio: '408', algorithm: 'Java算法', backend: '后端／AI应用', direction: '英语', choice: '复盘与目标', custom: '自定义',
   }
   const priorityLabels = { core: '核心', support: '基础', optional: '选做', custom: '自定义' }
   return (
@@ -481,10 +481,10 @@ function WeeklyOverview({ store, dateKey, navigate }) {
       <div className="route-preview">
         <div className="section-heading"><h2>考研＋就业双主线</h2><button onClick={() => navigate('roadmap')}>查看完整路线 <ChevronRight size={16} /></button></div>
         <div className="route-line">
-          <div className="route-node active"><i /><strong>现在</strong><span>四科＋Java基础</span></div>
-          <div className="route-node decision"><i /><strong>2027春</strong><span>后端项目成型</span></div>
-          <div className="route-node"><i /><strong>2027六月</strong><span>首轮＋简历投递</span></div>
-          <div className="route-node"><i /><strong>2027暑假</strong><span>强化＋就业保温</span></div>
+          <div className="route-node active"><i /><strong>现在</strong><span>四科＋API小练习</span></div>
+          <div className="route-node decision"><i /><strong>2027春</strong><span>业务后端＋RAG</span></div>
+          <div className="route-node"><i /><strong>2027六月</strong><span>工具调用＋评测</span></div>
+          <div className="route-node"><i /><strong>2027暑假</strong><span>强化＋评测维护</span></div>
           <div className="route-node"><i /><strong>九月起</strong><span>冲刺与秋招取舍</span></div>
         </div>
       </div>
@@ -501,7 +501,7 @@ function RoadmapView() {
   return (
     <div className="view roadmap-view">
       <div className="page-heading roadmap-heading">
-        <div><h1>从现在，到初试与 Java 后端求职</h1><p>2027 年 6 月前并行建设考试基础和后端项目，之后按阶段调整重心。</p></div>
+        <div><h1>从现在，到初试与后端／AI应用求职</h1><p>AI 应用能力从现有项目时间内逐步加入；2027 年 7 月以后只修错和维护评测。</p></div>
         <span className="framework-badge"><Target size={16} />六次进度校准</span>
       </div>
       <section className="learning-strategy" aria-label="当前学习策略">
@@ -745,7 +745,7 @@ function ReviewView({ store, setStore }) {
           <ReviewField label="下周最需要修复什么？" value={form.nextFocus} onChange={(value) => setForm({ ...form, nextFocus: value })} placeholder="只写一个最重要的补救动作……" />
           <div className="review-controls">
             <label><span>本周能量</span><input type="range" min="1" max="5" value={form.energy} onChange={(event) => setForm({ ...form, energy: Number(event.target.value) })} /><strong>{form.energy} / 5</strong></label>
-            <label><span>下周调整</span><select value={form.routeChange} onChange={(event) => setForm({ ...form, routeChange: event.target.value })}><option>保持计划</option><option>减少题量并补漏</option><option>增加数学时间</option><option>增加408时间</option><option>减少项目功能</option><option>补 Java／算法</option><option>期末周临时降载</option></select></label>
+            <label><span>下周调整</span><select value={form.routeChange} onChange={(event) => setForm({ ...form, routeChange: event.target.value })}><option>保持计划</option><option>减少题量并补漏</option><option>增加数学时间</option><option>增加408时间</option><option>减少项目／AI功能</option><option>补 Java／算法</option><option>期末周临时降载</option></select></label>
           </div>
           <button className="primary-button" type="submit"><Save size={17} />保存本周复盘</button>
         </form>
