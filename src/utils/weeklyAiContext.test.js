@@ -57,9 +57,10 @@ test('another selected week never exports the previous week data', () => {
   assert.doesNotMatch(text, /PRIVATE_|CUSTOM_CURRENT_WEEK|函数、数列极限/)
 })
 
-test('the export carries both exam and Java employment constraints', () => {
+test('the export carries the 22408 baseline and Java AI employment constraints', () => {
   const text = buildWeeklyAiContext({ dateKey: '2026-09-28' })
-  for (const keyword of ['2027 年底初试', '数学一', '英语一', '408', '政治', '24 小时', 'AI 应用后端', '模型 API', 'RAG', '工具调用', '评测', '不额外增加总时长', '官方页面']) assert.ok(text.includes(keyword), keyword)
+  for (const keyword of ['2027 年底初试', '204 英语二', '302 数学二', '408', '101 政治', '24 小时', 'AI 应用后端', 'Spring AI', 'LangChain', '模型 API', 'RAG', '工具调用', '评测', '不额外增加总时长', '官方页面']) assert.ok(text.includes(keyword), keyword)
+  assert.doesNotMatch(text, /数学一|英语一/)
 })
 
 test('out-of-window dates stay empty instead of inventing a plan', () => {

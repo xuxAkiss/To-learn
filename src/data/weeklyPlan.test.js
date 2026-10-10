@@ -36,6 +36,13 @@ test('AI application work is folded into existing project hours on alternating w
   assert.match(firstWeek.find((item) => item.category === 'backend').deliverable, /仓库不含密钥/)
 })
 
+test('the current plan uses the 22408 exam baseline', () => {
+  const setup = buildWeeklyTasks('2026-09-21')
+  const text = setup.flatMap((item) => [item.title, item.outcome, ...(item.steps || [])]).join('\n')
+  for (const keyword of ['204 英语二', '302 数学二', '408']) assert.match(text, new RegExp(keyword))
+  assert.doesNotMatch(text, /数学一|英语一/)
+})
+
 test('dates outside the task window do not invent catch-up tasks', () => {
   assert.equal(getWeeklyPlan('2026-09-14'), null)
   assert.deepEqual(buildWeeklyTasks('2026-09-14'), [])

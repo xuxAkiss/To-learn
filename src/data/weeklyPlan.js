@@ -9,17 +9,17 @@ const PYTHON_JSON = 'https://docs.python.org/zh-cn/3/library/json.html'
 const GIT_BOOK = 'https://git-scm.com/book/zh/v2'
 const LEETCODE = 'https://leetcode.cn/'
 const LUOGU = 'https://www.luogu.com.cn/'
-const FUDAN_ADMISSION = 'https://gsao.fudan.edu.cn/ssyjszszcwzszymlwfslqbf/list.htm'
+const FUDAN_ADMISSION = 'https://gsas.fudan.edu.cn/sszsml2027/index.html'
 
 export const phases = [
   {
     id: 'common-foundation', start: '2026-09-21', end: '2026-11-30', title: '共同基础', target: '推进高数、数据结构、Java 和英语；隔周完成模型 API 小练习，并开始用 AI 辅助测试与排错',
   },
   {
-    id: 'database-foundation', start: '2026-12-01', end: '2027-02-28', title: '计组与基础后端', target: '学习 SQL、HTTP、数据库和基础后端，让项目接入一个简单模型功能',
+    id: 'database-foundation', start: '2026-12-01', end: '2027-02-28', title: '计组与基础后端', target: '学习 SQL、HTTP、数据库和 Spring Boot；直接调用模型 API 跑通功能后再接入 Spring AI',
   },
   {
-    id: 'spring-and-os', start: '2027-03-01', end: '2027-04-30', title: '业务后端、RAG与操作系统', target: '完成基础预约业务，实现带引用的文档问答并理解 Embedding 与 RAG',
+    id: 'spring-and-os', start: '2027-03-01', end: '2027-04-30', title: '业务后端、RAG与操作系统', target: '完成基础预约业务，用 Spring AI 实现带引用的文档问答并理解 Embedding 与 RAG',
   },
   {
     id: 'first-round-and-resume', start: '2027-05-01', end: '2027-06-30', title: '首轮收口与求职', target: '数学、408 首轮结束；项目加入查询／预约工具调用与评测集，达到演示和简历标准',
@@ -39,11 +39,11 @@ export const phases = [
 ]
 
 export const planWindow = {
-  revision: 'exam-ai-backend-dual-track-2026-09-28',
+  revision: 'exam-22408-spring-ai-track-2026-10-10',
   start: '2026-09-21',
   end: '2026-10-25',
   nextUpdate: '2026-10-25',
-  label: '考研基础＋后端／AI应用就业 · 首月',
+  label: '复旦 22408＋后端／AI应用就业 · 首月',
 }
 
 const weeklyPlans = {
@@ -53,9 +53,9 @@ const weeklyPlans = {
     tasks: [
       task('dual-route-switch', '写清考研与就业双目标', 'choice', 'support', 30,
         '之后所有任务都要同时接受“是否服务初试或后端／AI 应用就业”的范围检查。',
-        ['写下目标：2027 年底参加初试，复旦计算机类专硕为冲刺方向', '写下就业目标：2027 年 6 月底前完成可讲清、可评测的后端／AI 应用项目，并尝试实习投递', '将大模型训练、微调、论文研究、游戏开发和无关新项目标记为暂停', '记录 2028 招生目录仍需在 2027 年秋核对'],
+        ['写下目标：2027 年底参加初试，复旦计算与智能创新学院 085400 电子信息专硕为冲刺方向', '以复旦 2027 目录的 101 政治、204 英语二、302 数学二、408 为当前基线', '写下就业目标：2027 年 6 月底前完成可讲清、可评测的后端／AI 应用项目，并尝试实习投递', '将大模型训练、微调、论文研究、游戏开发和无关新项目标记为暂停', '记录 2028 招生目录仍需在 2027 年秋核对'],
         '一页双目标说明，包含时间节点、保留事项、暂停事项与官方信息校准时间。',
-        [{ title: '复旦大学 · 招生章程与专业目录', url: FUDAN_ADMISSION }]),
+        [{ title: '复旦大学 · 2027 招生专业目录', url: FUDAN_ADMISSION }]),
       task('baseline-check', '完成高数与数据结构基线小测', 'engineering', 'core', 60,
         '先确认真正掌握程度，再决定课程速度和练习量。',
         ['高数限时 30 分钟，覆盖函数、极限与连续基础题', '数据结构限时 20 分钟，覆盖复杂度、数组与链表基础题', '按概念不清、方法不会、计算错误、粗心分类失分', '本周只记录结果，不临时补完整章节'],
@@ -68,12 +68,12 @@ const weeklyPlans = {
         [{ title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Git 中文教程', url: GIT_BOOK }]),
       task('study-setup', '固定资料与每周 24 小时时段', 'choice', 'support', 60,
         '减少换路线和重复计时，把双主线落实到日历。',
-        ['固定高数、王道数据结构、英语一真题与一套词汇工具', 'Java 以黑马基础课程选章和官方文档为主，不跟完整就业路线无限延伸', '排出数学 8 小时、408 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、复盘 1 小时', '模型 API、RAG 与评测从项目 4 小时内分配，不新增总时长'],
+        ['固定高数、王道数据结构、英语二真题与一套词汇工具', 'Java 以黑马基础课程选章和官方文档为主，不跟完整就业路线无限延伸', '排出数学 8 小时、408 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、复盘 1 小时', '模型 API、RAG 与评测从项目 4 小时内分配，不新增总时长'],
         '下周 24 小时已经进入日历，资料清单只保留首月会实际使用的入口。',
         [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: '黑马 Java 基础下部', url: JAVA_LOWER }]),
-      task('english-baseline', '完成一篇英语一阅读基线', 'direction', 'support', 30,
+      task('english-baseline', '完成一篇英语二阅读基线', 'direction', 'support', 30,
         '六级表现不能直接替代考研阅读基线。',
-        ['选择一篇较早年份英语一阅读', '不查词完成首次作答并记录耗时', '定位每题原文依据并标记主要错因'],
+        ['选择一篇较早年份英语二阅读', '不查词完成首次作答并记录耗时', '定位每题原文依据并标记主要错因'],
         '留下首次正确率、耗时、错因和至少一个影响理解的长句。',
         []),
     ],
@@ -104,7 +104,7 @@ const weeklyPlans = {
         [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Python JSON 文档', url: PYTHON_JSON }]),
       task('english-reading-1', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '建立词汇复习与真题精读的固定流程。',
-        ['词汇复习 6 天，每天约 20—30 分钟', '完成两篇较早年份英语一阅读，首次作答记录耗时', '逐题定位原文并解释错误选项', '只整理真正影响理解的词汇和长句'],
+        ['词汇复习 6 天，每天约 20—30 分钟', '完成两篇较早年份英语二阅读，首次作答记录耗时', '逐题定位原文并解释错误选项', '只整理真正影响理解的词汇和长句'],
         '两篇阅读都有正确率、耗时、原文依据与错因记录。',
         []),
       task('review-week-1', '周复盘 1h：核对六类真实投入', 'choice', 'support', 60,
@@ -140,7 +140,7 @@ const weeklyPlans = {
         [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
       task('english-reading-2', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '继续稳定流程并开始归类错误。',
-        ['词汇复习 6 天', '完成两篇较早年份英语一阅读并记录首次耗时', '将错题归为词汇、长句、定位或选项比较', '选择一个长句，第二天不看解析重新翻译'],
+        ['词汇复习 6 天', '完成两篇较早年份英语二阅读并记录首次耗时', '将错题归为词汇、长句、定位或选项比较', '选择一个长句，第二天不看解析重新翻译'],
         '两篇阅读都有原文依据和错误类型；完成一次长句延迟复现。',
         []),
       task('review-week-2', '周复盘 1h：检查解题与代码独立性', 'choice', 'support', 60,
@@ -176,7 +176,7 @@ const weeklyPlans = {
         [{ title: '黑马 Java 基础下部', url: JAVA_LOWER }, { title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Python JSON 文档', url: PYTHON_JSON }]),
       task('english-reading-3', '英语 4h：词汇与 2 篇阅读', 'direction', 'support', 240,
         '通过连续三周数据找出主要错误模式。',
-        ['词汇复习 6 天', '精读两篇英语一阅读并记录首次耗时', '更新词汇、长句、定位和选项比较的错误次数', '只针对出现最多的一类错误安排下周动作'],
+        ['词汇复习 6 天', '精读两篇英语二阅读并记录首次耗时', '更新词汇、长句、定位和选项比较的错误次数', '只针对出现最多的一类错误安排下周动作'],
         '完成两篇精读和三周错因统计，能指出当前第一薄弱项。',
         []),
       task('review-week-3', '周复盘 1h：隔周重做与负荷检查', 'choice', 'support', 60,
@@ -212,7 +212,7 @@ const weeklyPlans = {
         [{ title: 'Git 中文教程', url: GIT_BOOK }, { title: 'Java 官方学习文档', url: JAVA_LEARN }]),
       task('english-reading-4', '英语 4h：阅读复盘与长句整理', 'direction', 'support', 240,
         '完成首月阅读闭环并确定下一月薄弱项。',
-        ['继续词汇复习 6 天', '完成两篇较早年份英语一阅读', '统计四周正确率、平均首次耗时和错误类型', '整理最有代表性的长句，并制定下月唯一改进动作'],
+        ['继续词汇复习 6 天', '完成两篇较早年份英语二阅读', '统计四周正确率、平均首次耗时和错误类型', '整理最有代表性的长句，并制定下月唯一改进动作'],
         '完成四周阅读统计，能用数据说明下一月重点。',
         []),
       task('monthly-checkpoint', '周复盘 1h：双主线月度验收', 'choice', 'support', 60,

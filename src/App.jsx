@@ -157,7 +157,7 @@ function Sidebar({ activeView, navigate, open, close, openHelp }) {
         <div className="sidebar-spacer" />
         <div className="profile-card">
           <span className="avatar">K</span>
-          <span><strong>Kixu</strong><small>2028考研 · 后端／AI应用</small></span>
+          <span><strong>Kixu</strong><small>复旦22408 · 后端／AI应用</small></span>
         </div>
         <button className="sidebar-utility" onClick={() => navigate('review')}><Settings2 size={18} /><span>设置与数据</span></button>
         <button className="sidebar-utility" onClick={openHelp}><CircleHelp size={18} /><span>使用说明</span></button>
@@ -501,7 +501,7 @@ function RoadmapView() {
   return (
     <div className="view roadmap-view">
       <div className="page-heading roadmap-heading">
-        <div><h1>从现在，到初试与后端／AI应用求职</h1><p>AI 应用能力从现有项目时间内逐步加入；2027 年 7 月以后只修错和维护评测。</p></div>
+        <div><h1>复旦22408与后端／AI应用双线</h1><p>Java 项目以 Spring AI 为主，LangChain 用于 Python 原型识读；2027 年 7 月以后只修错和维护评测。</p></div>
         <span className="framework-badge"><Target size={16} />六次进度校准</span>
       </div>
       <section className="learning-strategy" aria-label="当前学习策略">

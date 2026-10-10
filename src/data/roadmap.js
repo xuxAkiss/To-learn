@@ -1,22 +1,25 @@
-const FUDAN_ADMISSION = 'https://gsao.fudan.edu.cn/ssyjszszcwzszymlwfslqbf/list.htm'
+const FUDAN_ADMISSION = 'https://gsas.fudan.edu.cn/sszsml2027/index.html'
 const SPRING_REST = 'https://spring.io/guides/gs/rest-service/'
 const SPRING_MYSQL = 'https://spring.io/guides/gs/accessing-data-mysql/'
 const SPRING_TESTING = 'https://spring.io/guides/gs/testing-web/'
+const SPRING_AI = 'https://docs.spring.io/spring-ai/reference/'
+const SPRING_AI_ALIBABA = 'https://java2ai.com/'
+const LANGCHAIN = 'https://docs.langchain.com/oss/python/langchain/overview'
 const JAVA_LEARN = 'https://dev.java/learn/'
 const MYSQL_TUTORIAL = 'https://dev.mysql.com/doc/refman/8.4/en/tutorial.html'
 const LEETCODE = 'https://leetcode.cn/problemset/'
 
 export const learningStrategy = {
-  summary: '双目标：参加 2027 年底初试，冲刺复旦计算机类专硕；同时形成后端开发／AI 应用后端的实习与就业竞争力。2027 年 6 月底前完成数学与 408 首轮，并做出一个能独立讲清、可评测的 AI 应用后端项目。',
-  examRule: '目前按数学一、英语一、408、政治准备；你参加的是 2028 年招生，最终专业、科目、统考名额和学费必须以 2027 年秋发布的官方目录为准。',
+  summary: '双目标：参加 2027 年底初试，冲刺复旦计算与智能创新学院 085400 电子信息专硕；同时形成后端开发／AI 应用后端的实习与就业竞争力。2027 年 6 月底前完成数学与 408 首轮，并做出一个能独立讲清、可评测的 AI 应用后端项目。',
+  examRule: '当前以复旦 2027 招生目录为基线，085400 电子信息的统考方向为 101 政治、204 英语二、302 数学二、408，即“22408”。你实际参加 2028 招生，仍须在 2027 年秋按官方目录复核专业方向、科目、统考名额、学费与住宿。',
   timeRule: '学期内仍执行每周 24 小时：数学 8 小时、408 笔试 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、周复盘 1 小时。模型 API、RAG、工具调用和评测都从原项目时间内分配，不额外增加总时长。',
-  scopeRule: '近期推进高数、数据结构、Java 和英语；每两周从项目时间中拿出一次小练习，用熟悉的 Python 调用模型 API 并解析结构化结果。只学应用所需的模型接口、Embedding、RAG、工具调用与评测，不同时铺开大模型训练、微调和论文研究。',
+  scopeRule: '近期推进高数、数据结构、Java 和英语二；每两周从项目时间中拿出一次小练习，用熟悉的 Python 直接调用模型 API 并解析结构化结果。Java 项目在完成 Spring Boot 基础后以 Spring AI／Spring AI Alibaba 为主，LangChain 只用于 Python 原型和岗位框架识读，不并行维护两套项目。只学应用所需的模型接口、Embedding、RAG、工具调用与评测，不同时铺开大模型训练、微调和论文研究。',
   checkpoints: [
     '2026 年 11 月底：Java 与算法继续推进，每两周完成一次 Python 模型 API／结构化结果小练习，并开始用 AI 辅助测试和排错',
-    '2027 年 2 月底：完成 SQL、HTTP、数据库与基础后端，让项目接入一个简单模型功能',
-    '2027 年 4 月底：基础预约业务完成，实现带引用的文档问答，并理解 Embedding 与 RAG 数据流',
-    '2027 年 6 月底：加入查询与预约工具调用，建立小型评测集，项目可演示、可解释并可写进简历',
-    '2027 年 7 月以后：考研强化为主，项目只通过修错和评测维护，不继续增加框架',
+    '2027 年 2 月底：完成 SQL、HTTP、数据库与 Spring Boot 基础，用直接 API 调用跑通模型功能后再接入 Spring AI',
+    '2027 年 4 月底：基础预约业务完成，用 Spring AI 实现带引用的文档问答，并理解 Embedding 与 RAG 数据流',
+    '2027 年 6 月底：加入查询与预约工具调用，建立小型评测集；能解释框架封装，也能脱离框架定位请求、检索与解析问题',
+    '2027 年 7 月以后：考研强化为主，项目只通过修错和评测维护，不切换或继续增加框架',
   ],
 }
 
@@ -50,10 +53,10 @@ export const lanes = [
     color: 'violet',
     items: [
       { id: 'java-foundation', title: 'Java 基础与模型 API 小练习', start: '2026-09', end: '2026-11', note: 'Java 语法、集合、文件读写和命令行程序继续；每两周从项目时间中安排一次 Python 模型 API 小练习，解析 JSON 等结构化结果。核心算法先独立写，再让 AI 审查；AI 生成的测试与修复必须自己运行、检查并解释。', resources: [{ title: 'Java 官方学习文档', url: JAVA_LEARN }] },
-      { id: 'mysql-jdbc', title: 'SQL、HTTP、基础后端与模型功能', start: '2026-12', end: '2027-02', note: '学习 SQL、HTTP、表设计、事务、索引与数据库访问；完成基础后端，并接入一个范围明确的简单模型功能。模型失败、超时和无效结构必须有处理。', resources: [{ title: 'MySQL 官方入门', url: MYSQL_TUTORIAL }] },
-      { id: 'spring-backend', title: '预约业务与带引用文档问答', start: '2027-03', end: '2027-04', note: '完成设备与时段查询、创建和取消预约、个人预约查询及管理员维护；学习 Embedding 与 RAG，实现回答中可追溯到原文片段的文档问答。', resources: [{ title: 'Spring REST', url: SPRING_REST }, { title: 'Spring 连接 MySQL', url: SPRING_MYSQL }, { title: 'Spring Web 测试', url: SPRING_TESTING }] },
-      { id: 'resume-project', title: '工具调用、评测与简历', start: '2027-05', end: '2027-06', note: '让模型通过受控工具查询设备与执行预约；覆盖参数校验、权限、失败回退和幂等。建立包含正常、边界、无答案与恶意输入的小型评测集，留下结果、README、演示和简历表述。' },
-      { id: 'project-maintenance', title: '修错与评测维护', start: '2027-07', end: '2027-12', note: '考研强化为主。项目停止增加框架，只根据真实错误修复代码、回归评测、更新文档与准备项目讲解。' },
+      { id: 'mysql-jdbc', title: 'SQL、HTTP、Spring Boot 与模型功能', start: '2026-12', end: '2027-02', note: '学习 SQL、HTTP、表设计、事务、索引与数据库访问；先直接调用模型 API 跑通一个范围明确的功能，再用 Spring AI 封装。模型失败、超时和无效结构必须有处理。', resources: [{ title: 'MySQL 官方入门', url: MYSQL_TUTORIAL }, { title: 'Spring AI 参考文档', url: SPRING_AI }] },
+      { id: 'spring-backend', title: '预约业务与 Spring AI 引用问答', start: '2027-03', end: '2027-04', note: '完成设备与时段查询、创建和取消预约、个人预约查询及管理员维护；用 Spring AI 学习 Embedding 与 RAG，实现回答中可追溯到原文片段的文档问答。用 Python 跑一个最小 LangChain 原型用于比较概念即可，不复制完整项目。', resources: [{ title: 'Spring REST', url: SPRING_REST }, { title: 'Spring 连接 MySQL', url: SPRING_MYSQL }, { title: 'Spring Web 测试', url: SPRING_TESTING }, { title: 'Spring AI', url: SPRING_AI }, { title: 'Spring AI Alibaba', url: SPRING_AI_ALIBABA }, { title: 'LangChain Python', url: LANGCHAIN }] },
+      { id: 'resume-project', title: 'Spring AI 工具调用、评测与简历', start: '2027-05', end: '2027-06', note: '让模型通过受控工具查询设备与执行预约；覆盖参数校验、权限、失败回退和幂等。建立包含正常、边界、无答案与恶意输入的小型评测集，留下结果、README、演示和简历表述；能解释 Spring AI 的作用，也能定位框架外的 HTTP、检索和数据问题。' },
+      { id: 'project-maintenance', title: '修错与评测维护', start: '2027-07', end: '2027-12', note: '考研强化为主。项目停止增加或切换框架，只根据真实错误修复代码、回归评测、更新文档与准备项目讲解。' },
     ],
   },
   {
@@ -61,7 +64,7 @@ export const lanes = [
     name: '英语 / 政治',
     color: 'amber',
     items: [
-      { id: 'english-reading', title: '词汇与英语一阅读', start: '2026-09', end: '2027-05', note: '固定词汇工具，每周精读 2—3 篇较早年份阅读，记录首次耗时、正确率、原文依据与错因。' },
+      { id: 'english-reading', title: '词汇与英语二阅读', start: '2026-09', end: '2027-05', note: '固定词汇工具，每周精读 2—3 篇较早年份英语二阅读，记录首次耗时、正确率、原文依据与错因。' },
       { id: 'english-all-types', title: '英语全题型', start: '2027-06', end: '2027-08', note: '持续阅读，逐步加入翻译、新题型和作文入门。' },
       { id: 'politics', title: '政治系统复习', start: '2027-07', end: '2027-12', note: '暑假开始系统学习与章节选择题，后期使用对应年度背诵和冲刺材料。' },
       { id: 'english-papers', title: '英语套卷与作文', start: '2027-09', end: '2027-12', note: '进行完整套卷与限时作文，保留近 3—5 年真题用于后期模拟。' },
@@ -74,7 +77,7 @@ export const lanes = [
     items: [
       { id: 'internship-watch', title: '后端／AI应用岗位与投递', start: '2027-04', end: '2027-06', note: '4—6 月开始关注 Java 后端与 AI 应用后端实习，不等项目完美；按岗位描述和面试反馈定向补课。' },
       { id: 'summer-tradeoff', title: '实习与强化取舍', start: '2027-07', end: '2027-08', note: '无实习可执行每周 35—40 小时强化；全职实习必须单独重排，不能与强化量直接叠加。' },
-      { id: 'catalog-and-autumn', title: '目录核对与秋招备选', start: '2027-09', end: '2027-10', note: '核对 2028 招生目录，同时整理岗位清单；投递、笔试和面试集中在固定时间内。', resources: [{ title: '复旦大学 · 招生章程与专业目录', url: FUDAN_ADMISSION }] },
+      { id: 'catalog-and-autumn', title: '目录核对与秋招备选', start: '2027-09', end: '2027-10', note: '以 2027 目录的 22408 为当前基线，核对 2028 招生目录是否变化；同时整理岗位清单，把投递、笔试和面试集中在固定时间内。', resources: [{ title: '复旦大学 · 2027 招生专业目录', url: FUDAN_ADMISSION }] },
       { id: 'post-exam', title: '复试、实习与春招', start: '2027-12', end: '2027-12', note: '初试后增加 Java 机考，整理项目与本科课程，并根据考试表现继续实习或春招申请。' },
     ],
   },
@@ -96,7 +99,7 @@ export const decisions = [
   {
     id: 'backend-entry', date: '2027-02-28', title: '数据库与计组验收',
     why: '进入 Spring Boot 前，必须会 SQL、Java 数据库读写，并完成数据结构首轮与计组主要章节。',
-    standards: ['能独立写多表查询与分组统计', 'Java 程序能使用参数化查询读写 MySQL', '能说明一次 HTTP 请求和一次模型调用的失败处理', '项目已有一个简单、可测试的模型功能', '数据结构首轮结束且计组主要章节完成'],
+    standards: ['能独立写多表查询与分组统计', 'Java 程序能使用参数化查询读写 MySQL', '能说明一次 HTTP 请求和一次模型调用的失败处理', '项目已有一个简单、可测试的模型功能', '能说明直接 API 调用与 Spring AI 封装的边界', '数据结构首轮结束且计组主要章节完成'],
     adjust: ['SQL 不熟：延后 AI 功能，先补查询与表设计', '计组落后：压缩模型功能范围', '达标：3 月进入基础业务、RAG 与操作系统'],
   },
   {
@@ -140,7 +143,7 @@ export const experiments = [
   },
   {
     id: 'backend', title: '后端／AI应用项目证据', window: '每两周', status: 'planned',
-    question: '模型能力是否被后端约束、测试和评测，而不是只做一次成功演示？',
+    question: '模型能力是否被后端约束、测试和评测，并且能解释 Spring AI 的封装边界，而不是只做一次成功演示？',
     deliverable: '可运行版本、引用或工具调用记录、测试、评测结果与 README',
     checks: ['按 README 可重新启动', '模型输出有结构校验、失败处理或引用', 'AI 生成代码已自行检查、运行并能解释', '能说明一个真实问题而不虚构效果或规模'],
   },
