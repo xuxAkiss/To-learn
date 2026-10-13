@@ -1,4 +1,4 @@
-const CACHE = 'kixu-learn-v8'
+const CACHE = 'kixu-learn-v9'
 const APP_ROOT = new URL('./', self.location.href).href
 const CORE = [APP_ROOT, new URL('manifest.webmanifest', APP_ROOT).href, new URL('icon.svg', APP_ROOT).href]
 

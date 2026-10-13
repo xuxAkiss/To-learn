@@ -8,10 +8,10 @@ import { usePersistentState } from './hooks/usePersistentState'
 import { getPhase, getPlanProgressLabel, getWeeklyPlan, planWindow, reconcileStoredWeeks, reconcileWeeklyPlan } from './data/weeklyPlan'
 import { decisions, experiments, lanes, learningStrategy, milestones } from './data/roadmap'
 import WeeklyAiExport from './components/WeeklyAiExport'
+import VocabularyView from './components/VocabularyView'
 import { formatChineseDate, fromDateKey, shiftDateKey, toDateKey, weekRange } from './utils/date'
 
 const STORAGE_KEY = 'kixu-learn-data-v1'
-const ENGLISH_VOCABULARY_URL = 'https://qwerty.kaiyi.cool/gallery'
 const todayKey = toDateKey()
 
 const initialStore = {
@@ -25,6 +25,7 @@ const initialStore = {
 
 const navItems = [
   { id: 'today', label: '今日', Icon: Home },
+  { id: 'vocabulary', label: '词汇', Icon: BookOpen },
   { id: 'roadmap', label: '路线', Icon: Map },
   { id: 'experiments', label: '学习诊断', shortLabel: '诊断', Icon: FlaskConical },
   { id: 'review', label: '周复盘', shortLabel: '复盘', Icon: BarChart3 },
@@ -33,7 +34,7 @@ const navItems = [
 export default function App() {
   const [activeView, setActiveView] = useState('today')
   const [selectedDate, setSelectedDate] = useState(todayKey)
-  const [store, setStore] = usePersistentState(STORAGE_KEY, initialStore)
+  const [store, setStore, saveError] = usePersistentState(STORAGE_KEY, initialStore)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
   const selectedWeekId = weekRange(selectedDate)[0]
@@ -126,6 +127,7 @@ export default function App() {
           />
         )}
         {activeView === 'roadmap' && <RoadmapView />}
+        {activeView === 'vocabulary' && <VocabularyView store={store} setStore={setStore} saveError={saveError} />}
         {activeView === 'experiments' && <ExperimentsView store={store} setStore={setStore} />}
         {activeView === 'review' && <ReviewView store={store} setStore={setStore} />}
       </main>
@@ -263,7 +265,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
           <div className="weekly-plan-meta">
             <span><CalendarDays size={16} />{formatShortDate(weekId)}—{formatShortDate(weekEnd)}</span>
             <div className="weekly-plan-actions">
-              <a className="vocabulary-shortcut" href={ENGLISH_VOCABULARY_URL} target="_blank" rel="noreferrer"><BookOpen size={14} />背英语二单词<ExternalLink size={12} /></a>
+              <button className="vocabulary-shortcut" onClick={() => navigate('vocabulary')}><BookOpen size={14} />背英语二单词</button>
               <strong>{planProgressLabel}</strong>
             </div>
           </div>
