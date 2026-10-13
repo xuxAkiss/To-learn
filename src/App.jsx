@@ -11,6 +11,7 @@ import WeeklyAiExport from './components/WeeklyAiExport'
 import { formatChineseDate, fromDateKey, shiftDateKey, toDateKey, weekRange } from './utils/date'
 
 const STORAGE_KEY = 'kixu-learn-data-v1'
+const ENGLISH_VOCABULARY_URL = 'https://qwerty.kaiyi.cool/gallery'
 const todayKey = toDateKey()
 
 const initialStore = {
@@ -261,7 +262,10 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
         <div className="task-surface">
           <div className="weekly-plan-meta">
             <span><CalendarDays size={16} />{formatShortDate(weekId)}—{formatShortDate(weekEnd)}</span>
-            <strong>{planProgressLabel}</strong>
+            <div className="weekly-plan-actions">
+              <a className="vocabulary-shortcut" href={ENGLISH_VOCABULARY_URL} target="_blank" rel="noreferrer"><BookOpen size={14} />背英语二单词<ExternalLink size={12} /></a>
+              <strong>{planProgressLabel}</strong>
+            </div>
           </div>
           <WeeklyAiExport key={weekId} dateKey={dateKey} store={store} />
           <div className="task-list">

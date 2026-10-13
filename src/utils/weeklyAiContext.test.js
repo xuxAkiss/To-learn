@@ -39,6 +39,7 @@ test('default export contains current exam instructions, links, completion and s
   assert.match(text, /bilibili\.com\/video\/BV1mr4y1K7Lb/)
   assert.match(text, /dev\.java\/learn/)
   assert.match(text, /docs\.python\.org/)
+  assert.match(text, /qwerty\.kaiyi\.cool/)
   assert.doesNotMatch(text, /PRIVATE_|OTHER_WEEK|STALE_TASK|UNKNOWN_PRIVATE_FIELD/)
 })
 

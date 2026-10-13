@@ -9,6 +9,7 @@ const PYTHON_JSON = 'https://docs.python.org/zh-cn/3/library/json.html'
 const GIT_BOOK = 'https://git-scm.com/book/zh/v2'
 const LEETCODE = 'https://leetcode.cn/'
 const LUOGU = 'https://www.luogu.com.cn/'
+const QWERTY_LEARNER = 'https://qwerty.kaiyi.cool/gallery'
 
 export const phases = [
   {
@@ -38,7 +39,7 @@ export const phases = [
 ]
 
 export const planWindow = {
-  revision: 'restart-22408-spring-ai-2026-10-19',
+  revision: 'restart-22408-spring-ai-vocab-2026-10-13',
   start: '2026-10-19',
   end: '2026-11-15',
   nextUpdate: '2026-11-15',
@@ -76,7 +77,7 @@ const weeklyPlans = {
         '建立词汇复习与真题精读的固定流程。',
         ['词汇复习 6 天，每天约 20—30 分钟', '完成两篇较早年份英语二阅读，首次作答记录耗时', '逐题定位原文并解释错误选项', '只整理真正影响理解的词汇和长句'],
         '两篇阅读都有正确率、耗时、原文依据与错因记录。',
-        []),
+        [{ title: 'Qwerty Learner · 英语二单词书', url: QWERTY_LEARNER }]),
       task('review-week-1', '周复盘 1h：核对六类真实投入', 'choice', 'support', 60,
         '第一周先验证 24 小时结构能否落地。',
         ['分别统计数学、408、Java 算法、英语、项目和复盘时长', '确认模型 API 练习计入项目 4 小时，没有额外叠加时间', '记录仍不能独立完成的一道题和一段代码', '检查密钥未入库，并写下结构化结果解析最容易失败的地方'],
@@ -112,7 +113,7 @@ const weeklyPlans = {
         '继续稳定流程并开始归类错误。',
         ['词汇复习 6 天', '完成两篇较早年份英语二阅读并记录首次耗时', '将错题归为词汇、长句、定位或选项比较', '选择一个长句，第二天不看解析重新翻译'],
         '两篇阅读都有原文依据和错误类型；完成一次长句延迟复现。',
-        []),
+        [{ title: 'Qwerty Learner · 英语二单词书', url: QWERTY_LEARNER }]),
       task('review-week-2', '周复盘 1h：检查解题与代码独立性', 'choice', 'support', 60,
         '视频和题解进度不能代替独立完成。',
         ['闭卷完成一次数学与数据结构小测', '脱离课程重写设备新增和查询主流程', '统计六类真实投入和睡眠影响', '若数学或 408 落后两周趋势明显，下周暂停增加项目功能'],
@@ -148,7 +149,7 @@ const weeklyPlans = {
         '通过连续三周数据找出主要错误模式。',
         ['词汇复习 6 天', '精读两篇英语二阅读并记录首次耗时', '更新词汇、长句、定位和选项比较的错误次数', '只针对出现最多的一类错误安排下周动作'],
         '完成两篇精读和三周错因统计，能指出当前第一薄弱项。',
-        []),
+        [{ title: 'Qwerty Learner · 英语二单词书', url: QWERTY_LEARNER }]),
       task('review-week-3', '周复盘 1h：隔周重做与负荷检查', 'choice', 'support', 60,
         '检验第一周内容是否形成长期记忆。',
         ['重做第 1 周代表性数学题和二分查找', '记录独立完成、提示后完成、仍不会三种状态', '核对六类实际时长是否接近 24 小时', '连续两周超负荷时先减项目功能和额外视频'],
@@ -184,7 +185,7 @@ const weeklyPlans = {
         '完成首月阅读闭环并确定下一月薄弱项。',
         ['继续词汇复习 6 天', '完成两篇较早年份英语二阅读', '统计四周正确率、平均首次耗时和错误类型', '整理最有代表性的长句，并制定下月唯一改进动作'],
         '完成四周阅读统计，能用数据说明下一月重点。',
-        []),
+        [{ title: 'Qwerty Learner · 英语二单词书', url: QWERTY_LEARNER }]),
       task('monthly-checkpoint', '周复盘 1h：双主线月度验收', 'choice', 'support', 60,
         '用解题、代码和真实投入决定下一月计划。',
         ['记录数学小测、数据结构复做、算法复做和命令行项目结果', '检查两次模型 API 练习、AI 辅助测试和密钥安全记录', '统计六类四周平均投入，不重复计时；如果数学或 408 落后两周以上，暂停增加 AI 功能', '把完成证据、卡点和下一月两个重点带到计划更新会话'],

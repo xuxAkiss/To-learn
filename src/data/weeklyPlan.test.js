@@ -37,6 +37,15 @@ test('AI application work is folded into existing project hours on alternating w
   assert.match(firstWeek.find((item) => item.category === 'backend').deliverable, /仓库不含密钥/)
 })
 
+test('every English task links directly to the selected postgraduate vocabulary trainer', () => {
+  for (const weekId of ['2026-10-19', '2026-10-26', '2026-11-02', '2026-11-09']) {
+    const englishTask = buildWeeklyTasks(weekId).find((item) => item.id.startsWith('english-reading-'))
+    assert.equal(englishTask.resources.length, 1)
+    assert.equal(englishTask.resources[0].url, 'https://qwerty.kaiyi.cool/gallery')
+    assert.match(englishTask.resources[0].title, /英语二单词书/)
+  }
+})
+
 test('the current plan uses the 22408 exam baseline', () => {
   const text = [learningStrategy.examRule, planWindow.label].join('\n')
   for (const keyword of ['204 英语二', '302 数学二', '408', '22408']) assert.match(text, new RegExp(keyword))

@@ -8,6 +8,7 @@ const LANGCHAIN = 'https://docs.langchain.com/oss/python/langchain/overview'
 const JAVA_LEARN = 'https://dev.java/learn/'
 const MYSQL_TUTORIAL = 'https://dev.mysql.com/doc/refman/8.4/en/tutorial.html'
 const LEETCODE = 'https://leetcode.cn/problemset/'
+const QWERTY_LEARNER = 'https://qwerty.kaiyi.cool/gallery'
 
 export const learningStrategy = {
   summary: '双目标：参加 2027 年底初试，冲刺复旦计算与智能创新学院 085400 电子信息专硕；同时形成后端开发／AI 应用后端的实习与就业竞争力。2027 年 6 月底前完成数学与 408 首轮，并做出一个能独立讲清、可评测的 AI 应用后端项目。',
@@ -64,7 +65,7 @@ export const lanes = [
     name: '英语 / 政治',
     color: 'amber',
     items: [
-      { id: 'english-reading', title: '词汇与英语二阅读', start: '2026-10', end: '2027-05', note: '2026 年 10 月 19 日起重新建立固定流程：使用一套词汇工具，每周精读 2—3 篇较早年份英语二阅读，记录首次耗时、正确率、原文依据与错因。' },
+      { id: 'english-reading', title: '词汇与英语二阅读', start: '2026-10', end: '2027-05', note: '2026 年 10 月 19 日起重新建立固定流程：打开 Qwerty Learner 后选择“考研 → 英语二单词书”背词；每周精读 2—3 篇较早年份英语二阅读，记录首次耗时、正确率、原文依据与错因。', resources: [{ title: 'Qwerty Learner · 英语二单词书', url: QWERTY_LEARNER }] },
       { id: 'english-all-types', title: '英语全题型', start: '2027-06', end: '2027-08', note: '持续阅读，逐步加入翻译、新题型和作文入门。' },
       { id: 'politics', title: '政治系统复习', start: '2027-07', end: '2027-12', note: '暑假开始系统学习与章节选择题，后期使用对应年度背诵和冲刺材料。' },
       { id: 'english-papers', title: '英语套卷与作文', start: '2027-09', end: '2027-12', note: '进行完整套卷与限时作文，保留近 3—5 年真题用于后期模拟。' },

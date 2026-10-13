@@ -138,6 +138,9 @@ h1, h2, h3, p { margin-top: 0; }
 .weekly-plan-meta { min-height: 35px; margin: -2px 2px 11px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 11px; }
 .weekly-plan-meta span { display: flex; align-items: center; gap: 7px; }
 .weekly-plan-meta strong { color: var(--primary); font-size: 11px; }
+.weekly-plan-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.vocabulary-shortcut { min-height: 32px; padding: 6px 9px; border: 1px solid #d7e0ff; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px; color: var(--primary); background: #f8faff; text-decoration: none; font-size: 11px; font-weight: 650; }
+.vocabulary-shortcut:hover { border-color: #aebeed; background: var(--primary-soft); }
 .task-list { display: grid; gap: 8px; }
 .task-row {
   overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: #fff; transition: border .2s, background .2s, transform .2s;
@@ -458,6 +461,8 @@ input[type="range"] { accent-color: var(--primary); width: 100%; }
   .today-progress { width: 100%; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 13px; padding: 0; }
   .today-progress > span { margin: 0; }
   .task-surface { padding: 0; border: 0; background: transparent; box-shadow: none; }
+  .weekly-plan-meta { align-items: flex-start; flex-wrap: wrap; }
+  .weekly-plan-actions { width: 100%; justify-content: space-between; }
   .task-list { gap: 9px; }
   .task-row { min-height: 68px; padding: 0; border-radius: 10px; background: white; }
   .task-row-main { min-height: 68px; padding: 9px 8px 9px 12px; gap: 10px; }
