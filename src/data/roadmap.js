@@ -29,7 +29,7 @@ export const lanes = [
     name: '数学',
     color: 'blue',
     items: [
-      { id: 'calculus-foundation', title: '高数基础', start: '2026-09', end: '2027-01', note: '武忠祥基础课与讲义为主。先做例题与练习，卡住再看对应讲解；同步完成 660 对应章节。' },
+      { id: 'calculus-foundation', title: '高数基础', start: '2026-10', end: '2027-01', note: '2026 年 10 月 19 日起从函数与极限重新开始。武忠祥基础课与讲义为主，先做例题与练习，卡住再看对应讲解；同步完成 660 对应章节。' },
       { id: 'linear-algebra', title: '线代基础', start: '2027-01', end: '2027-03', note: '按章节摸底决定听课量，使用李永乐课程与辅导讲义，不能用听完课程替代独立解题。' },
       { id: 'probability', title: '概率统计基础', start: '2027-03', end: '2027-06', note: '补齐概率与数理统计，完成讲义例题、660 与阶段混合测试。' },
       { id: 'math-intensive', title: '强化、真题与冲刺', start: '2027-07', end: '2027-12', note: '强化讲义、错题重做、综合题与真题逐步推进，近期真题留作后期完整模拟。' },
@@ -40,7 +40,7 @@ export const lanes = [
     name: '408 / Java算法',
     color: 'mint',
     items: [
-      { id: 'data-structure', title: '数据结构与 Java 实现', start: '2026-09', end: '2027-02', note: '王道章节学习、选择题、综合题与 Java 实现同步推进；每周约 3 道算法题，读过题解后必须隔日重写。', resources: [{ title: 'LeetCode 题库', url: LEETCODE }] },
+      { id: 'data-structure', title: '数据结构与 Java 实现', start: '2026-10', end: '2027-02', note: '2026 年 10 月 19 日起从复杂度与线性表重新开始。王道章节学习、选择题、综合题与 Java 实现同步推进；每周约 3 道算法题，读过题解后必须隔日重写。', resources: [{ title: 'LeetCode 题库', url: LEETCODE }] },
       { id: 'computer-organization', title: '计算机组成原理', start: '2026-12', end: '2027-02', note: '覆盖数据表示、存储、指令、CPU 与 I/O，计算题必须动手完成。' },
       { id: 'operating-system', title: '操作系统', start: '2027-03', end: '2027-04', note: '重点掌握进程线程、调度、同步互斥、死锁、内存、文件与 I/O。' },
       { id: 'network-first-round', title: '计网与首轮收口', start: '2027-05', end: '2027-06', note: '先做题定位薄弱处，再回看对应章节；同时补齐前三科缺口，6 月底结束首轮。' },
@@ -52,7 +52,7 @@ export const lanes = [
     name: '后端 / AI应用',
     color: 'violet',
     items: [
-      { id: 'java-foundation', title: 'Java 基础与模型 API 小练习', start: '2026-09', end: '2026-11', note: 'Java 语法、集合、文件读写和命令行程序继续；每两周从项目时间中安排一次 Python 模型 API 小练习，解析 JSON 等结构化结果。核心算法先独立写，再让 AI 审查；AI 生成的测试与修复必须自己运行、检查并解释。', resources: [{ title: 'Java 官方学习文档', url: JAVA_LEARN }] },
+      { id: 'java-foundation', title: 'Java 基础与模型 API 小练习', start: '2026-10', end: '2026-11', note: '2026 年 10 月 19 日起从 Java 类与命令行程序重新开始；每两周从项目时间中安排一次 Python 模型 API 小练习，解析 JSON 等结构化结果。核心算法先独立写，再让 AI 审查；AI 生成的测试与修复必须自己运行、检查并解释。', resources: [{ title: 'Java 官方学习文档', url: JAVA_LEARN }] },
       { id: 'mysql-jdbc', title: 'SQL、HTTP、Spring Boot 与模型功能', start: '2026-12', end: '2027-02', note: '学习 SQL、HTTP、表设计、事务、索引与数据库访问；先直接调用模型 API 跑通一个范围明确的功能，再用 Spring AI 封装。模型失败、超时和无效结构必须有处理。', resources: [{ title: 'MySQL 官方入门', url: MYSQL_TUTORIAL }, { title: 'Spring AI 参考文档', url: SPRING_AI }] },
       { id: 'spring-backend', title: '预约业务与 Spring AI 引用问答', start: '2027-03', end: '2027-04', note: '完成设备与时段查询、创建和取消预约、个人预约查询及管理员维护；用 Spring AI 学习 Embedding 与 RAG，实现回答中可追溯到原文片段的文档问答。用 Python 跑一个最小 LangChain 原型用于比较概念即可，不复制完整项目。', resources: [{ title: 'Spring REST', url: SPRING_REST }, { title: 'Spring 连接 MySQL', url: SPRING_MYSQL }, { title: 'Spring Web 测试', url: SPRING_TESTING }, { title: 'Spring AI', url: SPRING_AI }, { title: 'Spring AI Alibaba', url: SPRING_AI_ALIBABA }, { title: 'LangChain Python', url: LANGCHAIN }] },
       { id: 'resume-project', title: 'Spring AI 工具调用、评测与简历', start: '2027-05', end: '2027-06', note: '让模型通过受控工具查询设备与执行预约；覆盖参数校验、权限、失败回退和幂等。建立包含正常、边界、无答案与恶意输入的小型评测集，留下结果、README、演示和简历表述；能解释 Spring AI 的作用，也能定位框架外的 HTTP、检索和数据问题。' },
@@ -64,7 +64,7 @@ export const lanes = [
     name: '英语 / 政治',
     color: 'amber',
     items: [
-      { id: 'english-reading', title: '词汇与英语二阅读', start: '2026-09', end: '2027-05', note: '固定词汇工具，每周精读 2—3 篇较早年份英语二阅读，记录首次耗时、正确率、原文依据与错因。' },
+      { id: 'english-reading', title: '词汇与英语二阅读', start: '2026-10', end: '2027-05', note: '2026 年 10 月 19 日起重新建立固定流程：使用一套词汇工具，每周精读 2—3 篇较早年份英语二阅读，记录首次耗时、正确率、原文依据与错因。' },
       { id: 'english-all-types', title: '英语全题型', start: '2027-06', end: '2027-08', note: '持续阅读，逐步加入翻译、新题型和作文入门。' },
       { id: 'politics', title: '政治系统复习', start: '2027-07', end: '2027-12', note: '暑假开始系统学习与章节选择题，后期使用对应年度背诵和冲刺材料。' },
       { id: 'english-papers', title: '英语套卷与作文', start: '2027-09', end: '2027-12', note: '进行完整套卷与限时作文，保留近 3—5 年真题用于后期模拟。' },
@@ -85,7 +85,7 @@ export const lanes = [
 
 export const decisions = [
   {
-    id: 'rhythm', date: '2026-10-25', title: '四周双线节奏是否可持续',
+    id: 'rhythm', date: '2026-11-15', title: '重启四周的双线节奏是否可持续',
     why: '验证每周 24 小时是否能同时维持考研基础与后端／AI 应用起步，而不挤压学校课程和睡眠。',
     standards: ['数学与数据结构有实际做题记录', 'Java 能独立写出当周小程序', '至少完成一次 Python 模型 API 结构化结果练习', '英语完成每周 2 篇精读', '六类时间分别记录且没有重复计时'],
     adjust: ['连续两周超负荷：先减项目功能与额外视频', '数学或 408 落后两周以上：暂停增加新技术', '节奏稳定：继续推进命令行设备管理程序'],
@@ -162,8 +162,8 @@ export const experiments = [
 ]
 
 export const milestones = [
-  { date: '2026-09-26', title: '启动考研与就业双主线', state: 'done' },
-  { date: '2026-10-25', title: '完成首个四周节奏验证', state: 'current' },
+  { date: '2026-10-19', title: '从第 1 周重新启动双主线', state: 'current' },
+  { date: '2026-11-15', title: '完成重启后的四周节奏验证', state: 'planned' },
   { date: '2026-11-30', title: 'Java基础＋模型API小练习', state: 'planned' },
   { date: '2027-02-28', title: '基础后端接入模型功能', state: 'planned' },
   { date: '2027-04-30', title: '完成业务后端与引用问答', state: 'planned' },

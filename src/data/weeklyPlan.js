@@ -9,11 +9,10 @@ const PYTHON_JSON = 'https://docs.python.org/zh-cn/3/library/json.html'
 const GIT_BOOK = 'https://git-scm.com/book/zh/v2'
 const LEETCODE = 'https://leetcode.cn/'
 const LUOGU = 'https://www.luogu.com.cn/'
-const FUDAN_ADMISSION = 'https://gsas.fudan.edu.cn/sszsml2027/index.html'
 
 export const phases = [
   {
-    id: 'common-foundation', start: '2026-09-21', end: '2026-11-30', title: '共同基础', target: '推进高数、数据结构、Java 和英语；隔周完成模型 API 小练习，并开始用 AI 辅助测试与排错',
+    id: 'common-foundation', start: '2026-10-19', end: '2026-11-30', title: '共同基础', target: '推进高数、数据结构、Java 和英语；隔周完成模型 API 小练习，并开始用 AI 辅助测试与排错',
   },
   {
     id: 'database-foundation', start: '2026-12-01', end: '2027-02-28', title: '计组与基础后端', target: '学习 SQL、HTTP、数据库和 Spring Boot；直接调用模型 API 跑通功能后再接入 Spring AI',
@@ -39,46 +38,17 @@ export const phases = [
 ]
 
 export const planWindow = {
-  revision: 'exam-22408-spring-ai-track-2026-10-10',
-  start: '2026-09-21',
-  end: '2026-10-25',
-  nextUpdate: '2026-10-25',
-  label: '复旦 22408＋后端／AI应用就业 · 首月',
+  revision: 'restart-22408-spring-ai-2026-10-19',
+  start: '2026-10-19',
+  end: '2026-11-15',
+  nextUpdate: '2026-11-15',
+  label: '复旦 22408＋后端／AI应用就业 · 重启首月',
 }
 
+const retiredPlanWeeks = new Set(['2026-09-21', '2026-09-28', '2026-10-05', '2026-10-12'])
+
 const weeklyPlans = {
-  '2026-09-21': {
-    theme: '切换：建立考研与 Java 就业双主线',
-    result: '利用周末确认双目标、固定资料、完成基线并排好下周 24 小时时段，预计 4 小时。',
-    tasks: [
-      task('dual-route-switch', '写清考研与就业双目标', 'choice', 'support', 30,
-        '之后所有任务都要同时接受“是否服务初试或后端／AI 应用就业”的范围检查。',
-        ['写下目标：2027 年底参加初试，复旦计算与智能创新学院 085400 电子信息专硕为冲刺方向', '以复旦 2027 目录的 101 政治、204 英语二、302 数学二、408 为当前基线', '写下就业目标：2027 年 6 月底前完成可讲清、可评测的后端／AI 应用项目，并尝试实习投递', '将大模型训练、微调、论文研究、游戏开发和无关新项目标记为暂停', '记录 2028 招生目录仍需在 2027 年秋核对'],
-        '一页双目标说明，包含时间节点、保留事项、暂停事项与官方信息校准时间。',
-        [{ title: '复旦大学 · 2027 招生专业目录', url: FUDAN_ADMISSION }]),
-      task('baseline-check', '完成高数与数据结构基线小测', 'engineering', 'core', 60,
-        '先确认真正掌握程度，再决定课程速度和练习量。',
-        ['高数限时 30 分钟，覆盖函数、极限与连续基础题', '数据结构限时 20 分钟，覆盖复杂度、数组与链表基础题', '按概念不清、方法不会、计算错误、粗心分类失分', '本周只记录结果，不临时补完整章节'],
-        '两份小测结果和失分分类，能指出首月最需要修复的两个知识点。',
-        [{ title: '武忠祥高数基础课程', url: WU_CALCULUS }, { title: '王道数据结构课程', url: WANGDAO_DS }]),
-      task('java-git-setup', '配置 Java、IDE 与 Git 环境', 'backend', 'core', 60,
-        '下周开始必须能直接写、运行和提交 Java 代码，不能把环境问题拖进学习时段。',
-        ['安装或确认 JDK、IDE 与 Git 可用', '新建仓库并运行一个 Java 程序', '完成一次 add、commit 和 diff 查看', '创建算法练习与设备管理两个目录，不提前搭复杂框架'],
-        'Java 程序可运行，仓库已有首个提交，能够说明源码、编译结果和 Git 状态。',
-        [{ title: 'Java 官方学习文档', url: JAVA_LEARN }, { title: 'Git 中文教程', url: GIT_BOOK }]),
-      task('study-setup', '固定资料与每周 24 小时时段', 'choice', 'support', 60,
-        '减少换路线和重复计时，把双主线落实到日历。',
-        ['固定高数、王道数据结构、英语二真题与一套词汇工具', 'Java 以黑马基础课程选章和官方文档为主，不跟完整就业路线无限延伸', '排出数学 8 小时、408 5 小时、Java 算法 2 小时、英语 4 小时、Java／AI 应用项目 4 小时、复盘 1 小时', '模型 API、RAG 与评测从项目 4 小时内分配，不新增总时长'],
-        '下周 24 小时已经进入日历，资料清单只保留首月会实际使用的入口。',
-        [{ title: '黑马 Java 基础上部', url: JAVA_UPPER }, { title: '黑马 Java 基础下部', url: JAVA_LOWER }]),
-      task('english-baseline', '完成一篇英语二阅读基线', 'direction', 'support', 30,
-        '六级表现不能直接替代考研阅读基线。',
-        ['选择一篇较早年份英语二阅读', '不查词完成首次作答并记录耗时', '定位每题原文依据并标记主要错因'],
-        '留下首次正确率、耗时、错因和至少一个影响理解的长句。',
-        []),
-    ],
-  },
-  '2026-09-28': {
+  '2026-10-19': {
     theme: '第1周：极限、数组与 Java 起步',
     result: '完成 24 小时：极限、复杂度与数组、Java 语法方法与类、首次 Python 模型 API 结构化结果练习，以及两篇英语阅读。',
     tasks: [
@@ -114,7 +84,7 @@ const weeklyPlans = {
         []),
     ],
   },
-  '2026-10-05': {
+  '2026-10-26': {
     theme: '第2周：连续、链表与面向对象',
     result: '完成 24 小时：极限方法与连续、顺序表和链表、类与接口、内存设备列表，并用 AI 辅助补测试和排错。',
     tasks: [
@@ -150,7 +120,7 @@ const weeklyPlans = {
         []),
     ],
   },
-  '2026-10-12': {
+  '2026-11-02': {
     theme: '第3周：导数、栈队列与集合',
     result: '完成 24 小时：导数与微分、链表和栈队列、Java 异常集合与 CRUD，以及第二次模型 API 结构化结果练习。',
     tasks: [
@@ -186,7 +156,7 @@ const weeklyPlans = {
         []),
     ],
   },
-  '2026-10-19': {
+  '2026-11-09': {
     theme: '第4周：导数应用、栈队列应用与命令行版本',
     result: '完成 24 小时：导数应用和前三周错题小测、栈队列应用、命令行设备管理程序与 Git 版本。',
     tasks: [
@@ -239,7 +209,19 @@ export function getWeeklyPlan(weekId) {
 }
 
 export function reconcileWeeklyPlan(weekId, savedWeek) {
-  if (!getWeeklyPlan(weekId)) return savedWeek || { tasks: [] }
+  if (!getWeeklyPlan(weekId)) {
+    if (!savedWeek || !retiredPlanWeeks.has(weekId) || savedWeek.planRevision === planWindow.revision) return savedWeek || { tasks: [] }
+    const savedTasks = savedWeek.tasks || []
+    const retiredTasks = savedTasks.filter((item) => item.generated === true)
+    return {
+      ...savedWeek,
+      planRevision: planWindow.revision,
+      tasks: savedTasks.filter((item) => item.generated !== true),
+      planHistory: retiredTasks.length
+        ? [...(savedWeek.planHistory || []), { revision: savedWeek.planRevision || 'legacy', tasks: retiredTasks }]
+        : (savedWeek.planHistory || []),
+    }
+  }
   if (savedWeek?.planRevision === planWindow.revision) return savedWeek
 
   const savedTasks = savedWeek?.tasks || []

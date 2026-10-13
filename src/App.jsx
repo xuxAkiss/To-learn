@@ -204,6 +204,8 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
   const weekId = weekRange(dateKey)[0]
   const weekEnd = weekRange(dateKey).at(-1)
   const weeklyPlan = getWeeklyPlan(weekId)
+  const planProgressLabel = getPlanProgressLabel(weekId)
+  const beforeRestart = planProgressLabel === '计划开始前'
   const requiredTasks = week.tasks.filter((task) => task.priority !== 'optional')
   const completed = requiredTasks.filter((task) => task.completed).length
   const progress = requiredTasks.length ? Math.round((completed / requiredTasks.length) * 100) : 0
@@ -247,8 +249,8 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
               <button className="date-button" onClick={() => setDateKey(todayKey)}>{formatChineseDate(dateKey)}</button>
               <button className="icon-button" onClick={() => setDateKey(shiftDateKey(dateKey, 1))} aria-label="后一天"><ChevronRight size={19} /></button>
             </div>
-            <h1>{weeklyPlan?.theme || '本周详细计划尚未更新'}</h1>
-            <p className="week-result">{weeklyPlan?.result || '不要继续使用自动生成的泛化任务。请带着上月完成情况来更新下一阶段计划。'}</p>
+            <h1>{weeklyPlan?.theme || (beforeRestart ? '准备周：下周一从第 1 周重新开始' : '本周详细计划尚未更新')}</h1>
+            <p className="week-result">{weeklyPlan?.result || (beforeRestart ? `正式计划从 ${formatShortDate(planWindow.start)} 开始。本周不安排补做任务，也不把旧计划的欠账带入新周期。` : '不要继续使用自动生成的泛化任务。请带着上月完成情况来更新下一阶段计划。')}</p>
           </div>
           <div className="today-progress" aria-label={`本周完成 ${completed} / ${requiredTasks.length}`}>
             <span>本周任务 <strong>{completed} / {requiredTasks.length}</strong></span>
@@ -259,7 +261,7 @@ function TodayView({ dateKey, setDateKey, day, week, updateDay, updateWeek, stor
         <div className="task-surface">
           <div className="weekly-plan-meta">
             <span><CalendarDays size={16} />{formatShortDate(weekId)}—{formatShortDate(weekEnd)}</span>
-            <strong>{getPlanProgressLabel(weekId)}</strong>
+            <strong>{planProgressLabel}</strong>
           </div>
           <WeeklyAiExport key={weekId} dateKey={dateKey} store={store} />
           <div className="task-list">
@@ -496,7 +498,7 @@ function RoadmapView() {
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(decisions[0])
   const visibleLanes = filter === 'all' ? lanes : lanes.filter((lane) => lane.id === filter)
-  const months = useMemo(() => buildMonths('2026-09', '2027-12'), [])
+  const months = useMemo(() => buildMonths('2026-10', '2027-12'), [])
 
   return (
     <div className="view roadmap-view">
